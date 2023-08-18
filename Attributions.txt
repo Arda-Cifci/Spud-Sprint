@@ -1,0 +1,27 @@
+KEY
+This game uses these assets from Itch.io:
+"Mega Pixel Art 32x32 px. Icons Sprite Sheet" by Poloviiinkin ( https://poloviiinkin.itch.io/mega-pixel-art-32x32-px-icons-sprite-sheet)
+Licensed under CC BY-SA 4.0
+
+FLOOR & WALLS
+This game uses these assets from opengameart:
+"[LPC] House interior and decorations" by  Tuomo Untinen (Reemax) (https://opengameart.org/content/lpc-house-interior-and-decorations)
+licensed under CC BY-SA
+
+"Bomb Party - the complete set" By devurandom, Matt Hackett of Lost Decade Games, expanded by Cem Kalyoncu and /usr/share. (https://opengameart.org/content/bomb-party-the-complete-set)
+Licensed under CC BY 3.0
+
+
+CHAIRS
+"[LPC] House Insides" by Lanea Zimmerman (AKA Sharm) licensed CC-BY 3.0, GPL 3.0: https://opengameart.org/content/lpc-house-inside
+
+MUSIC
+This game uses these sounds from freesound:
+"Arcade Music Loop" by joshuaempyre ( https://freesound.org/people/joshuaempyre/ ) licensed under CCBY 4.0
+
+
+*********
+ALL OTHER ASSETS USED ARE EITHER MADE BY GROUP 19 MEMBERS 
+OR 
+REQUIRE NO CREDITS/ATTRIBUTIONS AS SPECIFIED BY THE CREATOR/OWNER OF THE ASSETS. 
+*********
