@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Button</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: Button (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Button</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (12/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;
+&nbsp;/**
+&nbsp; *  This class is for creating the various JButtons that the game uses.
+&nbsp; */
+&nbsp;public class Button extends JButton{
+&nbsp;    /**
+&nbsp;     * This constructor creates the JButton with correct options.
+&nbsp;     *
+&nbsp;     * @param textInput        : The JButton initial displayed text.
+&nbsp;     * @param panelToAdd       : The Panel the button gets added to.
+&nbsp;     * @param x                : the x - coordinate of the button.
+&nbsp;     * @param y                : the y - coordinate of the button.
+&nbsp;     * @param width            : the width of the JButton
+&nbsp;     * @param height           : the height of the JButton
+&nbsp;     */
+<b class="fc">&nbsp;    public Button(String textInput, JPanel panelToAdd, Integer x, Integer y, Integer width, Integer height) {</b>
+<b class="fc">&nbsp;        setText(textInput);</b>
+<b class="fc">&nbsp;        setOpaque(true);</b>
+<b class="fc">&nbsp;        setBackground(new Color(170, 92, 28, 255));</b>
+<b class="fc">&nbsp;        setForeground(Color.white);</b>
+<b class="fc">&nbsp;        setBorder(BorderFactory.createRaisedBevelBorder());</b>
+<b class="fc">&nbsp;        setFont(new Font(&quot;SansSerif&quot;, Font.BOLD, 30));</b>
+<b class="fc">&nbsp;        setBounds(x, y, width, height);</b>
+<b class="fc">&nbsp;        panelToAdd.add(this);</b>
+<b class="fc">&nbsp;        addActionListener((ActionListener) panelToAdd);</b>
+<b class="fc">&nbsp;        setEnabled(true);</b>
+<b class="fc">&nbsp;        setActionCommand(textInput);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method sets the button to enabled and visible.
+&nbsp;     */
+&nbsp;    public void setEnabledAndVisibleON(){
+<b class="nc">&nbsp;        setEnabled(true);</b>
+<b class="nc">&nbsp;        setVisible(true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Thiss method sets the button to not enabled and not visible.
+&nbsp;     */
+&nbsp;    public void setEnabledAndVisibleOFF(){
+<b class="nc">&nbsp;        setEnabled(false);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

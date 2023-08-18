@@ -1,0 +1,302 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BoardSpriteManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.Board</a>
+</div>
+
+<h1>Coverage Summary for Class: BoardSpriteManager (group19.Board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoardSpriteManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (33/33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.Board;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;/**
+&nbsp; *  This Class reads in and stores various resources we will use throughout the program. 
+&nbsp; * 
+&nbsp; *  Getter methods are used to retrive the resources. 
+&nbsp; */
+&nbsp;public class BoardSpriteManager {
+&nbsp;    //Image Variables used to store the resources.
+&nbsp;    BufferedImage bufferedPotatoFriend;
+&nbsp;    BufferedImage bufferedOpen;
+&nbsp;    BufferedImage bufferedTopBottomWall;
+&nbsp;    BufferedImage bufferedSideWall;
+&nbsp;    BufferedImage bufferedChairFront;
+&nbsp;    BufferedImage bufferedChairBack;
+&nbsp;    BufferedImage bufferedChairLeft;
+&nbsp;    BufferedImage bufferedChairRight;
+&nbsp;    BufferedImage bufferedHorizontalLeftTable;
+&nbsp;    BufferedImage bufferedHorizontalRightTable;
+&nbsp;    BufferedImage bufferedVerticalTopTable;
+&nbsp;    BufferedImage bufferedVerticalBottomTable;
+&nbsp;    BufferedImage bufferedDeepFryer;
+&nbsp;    BufferedImage bufferedKey;
+&nbsp;    BufferedImage bufferedClosedDoor;
+&nbsp;    BufferedImage bufferedOpenDoor;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This constructor reads in resources and stores them in BufferedImage variables.
+&nbsp;     * 
+&nbsp;     * @throws IOException
+&nbsp;     */
+<b class="fc">&nbsp;    public BoardSpriteManager() throws IOException {</b>
+<b class="fc">&nbsp;        bufferedPotatoFriend = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/potato_friend.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedOpen = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/Tile.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedTopBottomWall = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/WallFrontAndBack.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedSideWall = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/WallSides.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedChairFront = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/ChairFront.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedChairBack = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/ChairBack.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedChairLeft = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/ChairLeft.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedChairRight = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/ChairRight.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedHorizontalLeftTable = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/HorizonTableLeft.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedHorizontalRightTable = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/HorizonTableRight.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedVerticalTopTable = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/VertTableTop.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedVerticalBottomTable = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/VertTableBottom.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedDeepFryer = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/DeepFryer.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedKey = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/Key.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedClosedDoor = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/DoorClosed.png&quot;)));</b>
+<b class="fc">&nbsp;        bufferedOpenDoor = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(&quot;/DoorOpen.png&quot;)));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the potato friend bonus reward
+&nbsp;     * 
+&nbsp;     * @return : returns the potato friend image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedPotatoFriend() {
+<b class="fc">&nbsp;        return bufferedPotatoFriend;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the checkered floor tile
+&nbsp;     * 
+&nbsp;     * @return : returns the floor tile image.
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedOpen() {
+<b class="fc">&nbsp;        return bufferedOpen;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the top side of the wall
+&nbsp;     * 
+&nbsp;     * @return : returns the top side of wall image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedTopBottomWall() {
+<b class="fc">&nbsp;        return bufferedTopBottomWall;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the side image of the wall. 
+&nbsp;     * 
+&nbsp;     * @return : returns the side wall image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedSideWall() {
+<b class="fc">&nbsp;        return bufferedSideWall;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for front facing chair image
+&nbsp;     * 
+&nbsp;     * @return : returns front facing chair image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedChairFront() {
+<b class="fc">&nbsp;        return bufferedChairFront;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for back facing chair image
+&nbsp;     * 
+&nbsp;     * @return : returns back facing chair image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedChairBack() {
+<b class="fc">&nbsp;        return bufferedChairBack;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for left facing chair image
+&nbsp;     * 
+&nbsp;     * @return : returns left facing chair image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedChairLeft() {
+<b class="fc">&nbsp;        return bufferedChairLeft;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;     /**
+&nbsp;     * Getter method for right facing chair image
+&nbsp;     * 
+&nbsp;     * @return : returns right facing chair image
+&nbsp;     */
+&nbsp;    public BufferedImage getBufferedChairRight() {
+<b class="fc">&nbsp;        return bufferedChairRight;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the horizontal table left image
+&nbsp;     * 
+&nbsp;     * @return : returns right horizontal table left image
+&nbsp;     */    
+&nbsp;    public BufferedImage getBufferedHorizontalLeftTable() {
+<b class="fc">&nbsp;        return bufferedHorizontalLeftTable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the horizontal table right image
+&nbsp;     * 
+&nbsp;     * @return : returns right horizontal table right image
+&nbsp;     */  
+&nbsp;    public BufferedImage getBufferedHorizontalRightTable() {
+<b class="fc">&nbsp;        return bufferedHorizontalRightTable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the vertical table top image
+&nbsp;     * 
+&nbsp;     * @return : returns right vertical table top image
+&nbsp;     */  
+&nbsp;    public BufferedImage getBufferedVerticalTopTable() {
+<b class="fc">&nbsp;        return bufferedVerticalTopTable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the vertical table bottom image
+&nbsp;     * 
+&nbsp;     * @return : returns right vertical table bottom image
+&nbsp;     */  
+&nbsp;    public BufferedImage getBufferedVerticalBottomTable() {
+<b class="fc">&nbsp;        return bufferedVerticalBottomTable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the deep fryer image
+&nbsp;     * 
+&nbsp;     * @return : returns deep fryer image
+&nbsp;     */   
+&nbsp;    public BufferedImage getBufferedDeepFryer() {
+<b class="fc">&nbsp;        return bufferedDeepFryer;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the key image
+&nbsp;     * 
+&nbsp;     * @return : returns key image
+&nbsp;     */   
+&nbsp;    public BufferedImage getBufferedKey() {
+<b class="fc">&nbsp;        return bufferedKey;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the closed door image
+&nbsp;     * 
+&nbsp;     * @return : returns closed door image
+&nbsp;     */   
+&nbsp;    public BufferedImage getBufferedClosedDoor() {
+<b class="fc">&nbsp;        return bufferedClosedDoor;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Getter method for the open door image
+&nbsp;     * 
+&nbsp;     * @return : returns open door image
+&nbsp;     */   
+&nbsp;    public BufferedImage getBufferedOpenDoor() {
+<b class="fc">&nbsp;        return bufferedOpenDoor;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

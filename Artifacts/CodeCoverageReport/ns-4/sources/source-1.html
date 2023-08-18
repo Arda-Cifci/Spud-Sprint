@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InputHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.InputHandler</a>
+</div>
+
+<h1>Coverage Summary for Class: InputHandler (group19.InputHandler)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InputHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (9/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (24/27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.InputHandler;
+&nbsp;
+&nbsp;import group19.GameLoop.Direction;
+&nbsp;
+&nbsp;import java.awt.event.KeyEvent;
+&nbsp;import java.awt.event.KeyListener;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles the user&#39;s keyboard input. Able to return its current Direction,
+&nbsp; * return its current CharacterCommand, and handle character input.
+&nbsp; */
+<b class="fc">&nbsp;public class InputHandler implements KeyListener {</b>
+<b class="fc">&nbsp;    private Direction direction = Direction.STILL;</b>
+<b class="fc">&nbsp;    private CharacterCommand characterCommand = new NoMove();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the direction that the PlayerCharacter is moving.
+&nbsp;     *
+&nbsp;     * @return current direction
+&nbsp;     */
+&nbsp;    public Direction getDirection() {
+<b class="fc">&nbsp;        return direction;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the given user input
+&nbsp;     *
+&nbsp;     * @param keyCode user input
+&nbsp;     */
+&nbsp;    private void handleCharacterInput(int keyCode) {
+&nbsp;
+<b class="pc">&nbsp;        switch (keyCode) {</b>
+&nbsp;            case (KeyEvent.VK_W) -&gt; {
+<b class="fc">&nbsp;                characterCommand = new MoveUp();</b>
+<b class="fc">&nbsp;                direction = Direction.UP;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (KeyEvent.VK_A) -&gt; {
+<b class="fc">&nbsp;                characterCommand = new MoveLeft();</b>
+<b class="fc">&nbsp;                direction = Direction.LEFT;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (KeyEvent.VK_S) -&gt; {
+<b class="fc">&nbsp;                characterCommand = new MoveDown();</b>
+<b class="fc">&nbsp;                direction = Direction.DOWN;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (KeyEvent.VK_D) -&gt; {
+<b class="fc">&nbsp;                characterCommand = new MoveRight();</b>
+<b class="fc">&nbsp;                direction = Direction.RIGHT;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            default -&gt; {
+<b class="nc">&nbsp;                characterCommand = new NoMove();</b>
+<b class="nc">&nbsp;                direction = Direction.STILL;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stub class required by KeyListener interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void keyTyped(KeyEvent e) {
+&nbsp;        //stub
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stub class required by KeyListener interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void keyPressed(KeyEvent e) {
+<b class="fc">&nbsp;        int keyCode = e.getKeyCode();</b>
+<b class="pc">&nbsp;        switch (keyCode) {</b>
+&nbsp;            case (KeyEvent.VK_W), (KeyEvent.VK_A),
+<b class="fc">&nbsp;                    (KeyEvent.VK_S), (KeyEvent.VK_D) -&gt; handleCharacterInput(keyCode);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stub class required by KeyListener interface
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void keyReleased(KeyEvent e) {
+<b class="fc">&nbsp;        int keyCode = e.getKeyCode();</b>
+<b class="pc">&nbsp;        switch (keyCode) {</b>
+&nbsp;            case (KeyEvent.VK_W), (KeyEvent.VK_A),
+<b class="fc">&nbsp;                    (KeyEvent.VK_S), (KeyEvent.VK_D) -&gt; this.characterCommand = new NoMove();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the current command.
+&nbsp;     *
+&nbsp;     * @return current characterCommand
+&nbsp;     */
+&nbsp;    public CharacterCommand getCharacterCommand() {
+<b class="fc">&nbsp;        return characterCommand;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

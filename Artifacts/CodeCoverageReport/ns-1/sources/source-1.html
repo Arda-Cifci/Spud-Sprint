@@ -1,0 +1,258 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Board</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.Board</a>
+</div>
+
+<h1>Coverage Summary for Class: Board (group19.Board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (40/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.Board;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a board which is a matrix of board tiles.
+&nbsp; * One can get a random tiles col/row, and get a list
+&nbsp; * either deep fryers or key positions.
+&nbsp; */
+&nbsp;
+&nbsp;public class Board {
+&nbsp;    // Variables used
+&nbsp;    protected int tileWidth;
+&nbsp;    protected int tileHeight;
+&nbsp;    protected int mapType;
+&nbsp;    protected BoardTile[][] tiles;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new Board with the given width, height, and map type.
+&nbsp;     *
+&nbsp;     * @param tileWidth  - width of the tile
+&nbsp;     * @param tileHeight - height of the tile
+&nbsp;     * @param mapType    - type of the map
+&nbsp;     */
+<b class="fc">&nbsp;    public Board(int tileWidth, int tileHeight, int mapType) {</b>
+<b class="fc">&nbsp;        this.tileWidth = tileWidth;</b>
+<b class="fc">&nbsp;        this.tileHeight = tileHeight;</b>
+<b class="fc">&nbsp;        this.mapType = mapType;</b>
+<b class="fc">&nbsp;        this.tiles = MapReader.getMap(this.mapType);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Extracts the X,Y coordinates of the tile.
+&nbsp;     *
+&nbsp;     * @param tileKeys        - List of boardtiles that are collected up by the stream() api
+&nbsp;     * @param coordinatePairs - X,Y coordinates of a tile
+&nbsp;     */
+&nbsp;    private static void extractXYCoordinates(List&lt;BoardTile&gt; tileKeys, ArrayList&lt;int[]&gt; coordinatePairs) {
+<b class="fc">&nbsp;        for (BoardTile tile : tileKeys) {</b>
+<b class="fc">&nbsp;            int[] coordinatePair = new int[2];</b>
+<b class="fc">&nbsp;            coordinatePair[0] = tile.getXPosition();</b>
+<b class="fc">&nbsp;            coordinatePair[1] = tile.getYPosition();</b>
+<b class="fc">&nbsp;            coordinatePairs.add(coordinatePair);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the X,Y coordinates of open tiles.
+&nbsp;     *
+&nbsp;     * @return this tile&#39;s X,Y coordinates.
+&nbsp;     */
+&nbsp;    public int[] getOpenTileCoordinates() {
+<b class="fc">&nbsp;        int[] XYCoords = new int[2];</b>
+<b class="fc">&nbsp;        List&lt;BoardTile&gt; openTiles = Arrays.stream(tiles)</b>
+<b class="fc">&nbsp;                .flatMap(Arrays::stream)</b>
+<b class="fc">&nbsp;                .filter(BoardTile::isOpen)</b>
+<b class="fc">&nbsp;                .filter(tile -&gt; tile.getTileType() == 0)</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;
+<b class="fc">&nbsp;        Collections.shuffle(openTiles);</b>
+<b class="fc">&nbsp;        BoardTile tile = openTiles.get(0);</b>
+&nbsp;
+<b class="fc">&nbsp;        XYCoords[0] = tile.getXPosition();</b>
+<b class="fc">&nbsp;        XYCoords[1] = tile.getYPosition();</b>
+<b class="fc">&nbsp;        return XYCoords;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the X,Y coordinates of door key.
+&nbsp;     *
+&nbsp;     * @return this door key&#39;s X,Y coordinate pair.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;int[]&gt; getDoorKeyPositions() {
+<b class="fc">&nbsp;        List&lt;BoardTile&gt; tileKeys = Arrays.stream(tiles)</b>
+<b class="fc">&nbsp;                .flatMap(Arrays::stream)</b>
+<b class="fc">&nbsp;                .filter(tile -&gt; tile.getTileType() == Character.getNumericValue(&#39;c&#39;))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        ArrayList&lt;int[]&gt; coordinatePairs = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        extractXYCoordinates(tileKeys, coordinatePairs);</b>
+<b class="fc">&nbsp;        return coordinatePairs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets True/False value of whether tile&#39;s open or not.
+&nbsp;     *
+&nbsp;     * @param xCoordinate - x coordinate of the tile
+&nbsp;     * @param yCoordinate - y coordinate of the tile
+&nbsp;     * @return True if this tile&#39;s open, False otherwise.
+&nbsp;     */
+&nbsp;    public boolean getIfTileOpen(int xCoordinate, int yCoordinate) {
+<b class="fc">&nbsp;        return tiles[yCoordinate][xCoordinate].isOpen();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the width of the tile.
+&nbsp;     *
+&nbsp;     * @return this tile&#39;s width.
+&nbsp;     */
+&nbsp;    public int getTileWidth() {
+<b class="fc">&nbsp;        return tileWidth;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the height of the tile.
+&nbsp;     *
+&nbsp;     * @return this tile&#39;s height.
+&nbsp;     */
+&nbsp;    public int getTileHeight() {
+<b class="fc">&nbsp;        return tileHeight;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the type of the tile.
+&nbsp;     *
+&nbsp;     * @param xCoordinate - x coordinate of the tile
+&nbsp;     * @param yCoordinate - y coordinate of the tile
+&nbsp;     * @return this tile&#39;s type.
+&nbsp;     */
+&nbsp;    public int getTileType(int xCoordinate, int yCoordinate) {
+<b class="fc">&nbsp;        return tiles[yCoordinate][xCoordinate].getTileType();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the position of deep fryer.
+&nbsp;     *
+&nbsp;     * @return this deep fryer&#39;s X,Y coordinate pair.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;int[]&gt; getDeepFryerPositions() {
+<b class="fc">&nbsp;        List&lt;BoardTile&gt; tileKeys = Arrays.stream(tiles)</b>
+<b class="fc">&nbsp;                .flatMap(Arrays::stream)</b>
+<b class="fc">&nbsp;                .filter(tile -&gt; tile.getTileType() == Character.getNumericValue(&#39;b&#39;))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+<b class="fc">&nbsp;        ArrayList&lt;int[]&gt; coordinatePairs = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        extractXYCoordinates(tileKeys, coordinatePairs);</b>
+<b class="fc">&nbsp;        return coordinatePairs;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

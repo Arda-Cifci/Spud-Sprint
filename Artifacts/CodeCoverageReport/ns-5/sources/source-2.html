@@ -1,0 +1,299 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DifficultyScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: DifficultyScreen (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DifficultyScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/81)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import group19.GameLoop.GameLoop;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class creates and paints the difficulty select screen jpanel and its corresponding buttons.
+&nbsp; */
+&nbsp;public class DifficultyScreen extends JPanel implements ActionListener {
+&nbsp;    //Variable and objects used.
+&nbsp;    private final BufferedImage buff;
+&nbsp;    private final JFrame ui;
+&nbsp;    private final PauseScreen ps;
+&nbsp;    private final GameLoop game;
+<b class="nc">&nbsp;    protected int start = 0;</b>
+&nbsp;    private int difficultyLevel;
+&nbsp;    private HomeScreen homescreen;
+&nbsp;    private JButton easy;
+&nbsp;    private JButton med;
+&nbsp;    private JButton hard;
+&nbsp;    private JButton back;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This constructor creates the difficulty screen by calling methods to add buttons and printing the background.
+&nbsp;     *
+&nbsp;     * @param game :the main gameloop jpanel is passed into this class in order to set the difficulty and initialize the game.
+&nbsp;     * @param ui   :ui is passed into this class to correct the screens height and width.
+&nbsp;     * @param ps   :The pause screen is passed into this class in order to un-pause the game.
+&nbsp;     * @throws IOException
+&nbsp;     */
+<b class="nc">&nbsp;    public DifficultyScreen(GameLoop game, JFrame ui, PauseScreen ps) throws IOException {</b>
+&nbsp;        //Set parameters into class variables.
+<b class="nc">&nbsp;        this.game = game;</b>
+<b class="nc">&nbsp;        this.ui = ui;</b>
+<b class="nc">&nbsp;        this.ps = ps;</b>
+&nbsp;
+<b class="nc">&nbsp;        setLayout(null);</b>
+&nbsp;
+&nbsp;        // Paint background img.
+<b class="nc">&nbsp;        buff = ImageIO.read(getClass().getResourceAsStream(&quot;/chooseDifficulty.jpg&quot;));</b>
+&nbsp;       
+&nbsp;        //Add buttons.
+<b class="nc">&nbsp;        buttons();</b>
+<b class="nc">&nbsp;        setFocusable(true);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Paints the UI screen with the background image.
+&nbsp;     *
+&nbsp;     * @param g - given graphic
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void paintComponent(Graphics g) {
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+<b class="nc">&nbsp;        g.drawImage(buff, 0, 0, 1008, 729, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Toggles the Difficulty screens&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     *
+&nbsp;     * @param onoff toggles the Losescreen&#39;s buttons if equal to &quot;ON&quot;. Otherwise, turns them off
+&nbsp;     */
+&nbsp;    public void togglebuttons(String onoff) {
+<b class="nc">&nbsp;        if (onoff == &quot;ON&quot;) {</b>
+<b class="nc">&nbsp;            ((Button) easy).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) med).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) hard).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) back).setEnabledAndVisibleON();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            ((Button) easy).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) med).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) hard).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) back).setEnabledAndVisibleOFF();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the Difficulty screens&#39;s buttons.
+&nbsp;     */
+&nbsp;    public void buttons() {
+&nbsp;        //create button blanks.
+<b class="nc">&nbsp;        easy = new Button(&quot;EASY&quot;, this, 140, 280, 200, 100);</b>
+<b class="nc">&nbsp;        med = new Button(&quot;MEDIUM&quot;, this, 400, 280, 200, 100);</b>
+<b class="nc">&nbsp;        hard = new Button(&quot;HARD&quot;, this, 660, 280, 200, 100);</b>
+<b class="nc">&nbsp;        back = new Button(&quot;BACK&quot;, this, 60, 600, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the player presses the easy, med, hard, and back buttons in the panel. 
+&nbsp;     *  This method sets the game difficulty and starts the game when the corresponding button gets pressed.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void actionPerformed (ActionEvent e){
+<b class="nc">&nbsp;        String pressed = e.getActionCommand();</b>
+<b class="nc">&nbsp;        if (pressed.equals(&quot;EASY&quot;)) {</b>
+<b class="nc">&nbsp;            difficultyLevel = 1;</b>
+&nbsp;
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+&nbsp;
+<b class="nc">&nbsp;            ui.setSize(1224, 807);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (start == 0) {</b>
+<b class="nc">&nbsp;                start++;</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+<b class="nc">&nbsp;                game.startRenderThread();</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                ps.setPauseFalse();</b>
+<b class="nc">&nbsp;                game.unSetPauseFlag();</b>
+<b class="nc">&nbsp;                game.reset();</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            game.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            game.setVisible(true);</b>
+<b class="nc">&nbsp;            game.requestFocus();</b>
+<b class="nc">&nbsp;        } else if (pressed.equals(&quot;MEDIUM&quot;)) {</b>
+<b class="nc">&nbsp;            difficultyLevel = 4;</b>
+&nbsp;
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+&nbsp;
+<b class="nc">&nbsp;            ui.setSize(1224, 807);</b>
+<b class="nc">&nbsp;            if (start == 0) {</b>
+<b class="nc">&nbsp;                start++;</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+<b class="nc">&nbsp;                game.startRenderThread();</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                ps.setPauseFalse();</b>
+<b class="nc">&nbsp;                game.unSetPauseFlag();</b>
+<b class="nc">&nbsp;                game.reset();</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            game.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            game.setVisible(true);</b>
+<b class="nc">&nbsp;            game.requestFocus();</b>
+<b class="nc">&nbsp;        } else if (pressed.equals(&quot;HARD&quot;)) {</b>
+<b class="nc">&nbsp;            difficultyLevel = 7;</b>
+&nbsp;
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            ui.setSize(1224, 807);</b>
+<b class="nc">&nbsp;            if (start == 0) {</b>
+<b class="nc">&nbsp;                start++;</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+<b class="nc">&nbsp;                game.startRenderThread();</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                game.reset();</b>
+<b class="nc">&nbsp;                ps.setPauseFalse();</b>
+<b class="nc">&nbsp;                game.unSetPauseFlag();</b>
+<b class="nc">&nbsp;                game.setGameDifficultyState(difficultyLevel);</b>
+<b class="nc">&nbsp;                game.initMap();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            game.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            game.setVisible(true);</b>
+<b class="nc">&nbsp;            game.requestFocus();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the Difficulty screen&#39;s homescreen object to the parameter title.
+&nbsp;     *
+&nbsp;     * @param title : title to set
+&nbsp;     */
+&nbsp;    public void setTitle(HomeScreen title) {
+<b class="nc">&nbsp;        this.homescreen = title;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

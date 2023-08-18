@@ -1,0 +1,377 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GameState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.GameLoop</a>
+</div>
+
+<h1>Coverage Summary for Class: GameState (group19.GameLoop)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (53/53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.GameLoop;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents the game state such as difficulty, score, win/lose, # of keys collected, time, etc.
+&nbsp; * One can get/set and change such states.
+&nbsp; */
+<b class="fc">&nbsp;public class GameState {</b>
+&nbsp;    //Various gamestate variables used
+<b class="fc">&nbsp;    private final int playerStartXCoordinate = 94;</b>
+<b class="fc">&nbsp;    private final int playerStartYCoordinate = 700;</b>
+<b class="fc">&nbsp;    private final double framesPerSecond = 60;</b>
+<b class="fc">&nbsp;    private final int gamePixelWidth = 1224;</b>
+<b class="fc">&nbsp;    private final int gamePixelHeight = 768;</b>
+<b class="fc">&nbsp;    private final int playableWidth = 32;</b>
+<b class="fc">&nbsp;    private final int playableHeight = 24;</b>
+&nbsp;    long stunTime;
+<b class="fc">&nbsp;    private boolean playerStun = false;</b>
+<b class="fc">&nbsp;    private int difficulty = 0;</b>
+<b class="fc">&nbsp;    private int score = 100;</b>
+&nbsp;    private int keysCollected;
+<b class="fc">&nbsp;    private int levelNum = 1;</b>
+<b class="fc">&nbsp;    private long time = 0;</b>
+&nbsp;    private double totalSecs;
+&nbsp;    private double min;
+&nbsp;    private double sec;
+&nbsp;    private int rounded;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the level of difficulty of this game .
+&nbsp;     *
+&nbsp;     * @return this game&#39;s difficulty.
+&nbsp;     */
+&nbsp;    public int getDifficulty() {
+<b class="fc">&nbsp;        return this.difficulty;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets this game&#39;s difficulty to a given difficulty.
+&nbsp;     *
+&nbsp;     * @param difficulty - this game&#39;s new difficulty
+&nbsp;     */
+&nbsp;    public void setDifficulty(int difficulty) {
+<b class="fc">&nbsp;        this.difficulty = difficulty;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the score of this game .
+&nbsp;     *
+&nbsp;     * @return this game&#39;s score.
+&nbsp;     */
+&nbsp;    public int getScore() {
+<b class="fc">&nbsp;        return this.score;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Decrements this game&#39;s score by 60.
+&nbsp;     */
+&nbsp;    public void decrementScore() {
+<b class="fc">&nbsp;        this.score -= 90;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the elapsed time of this game .
+&nbsp;     *
+&nbsp;     * @return elapsed time(minute:second) of this game
+&nbsp;     */
+&nbsp;    public String getTime() {
+<b class="fc">&nbsp;        totalSecs = this.time / 1_000_000_000.0; // 1 sec = 1000000000 nanosec</b>
+<b class="fc">&nbsp;        sec = (totalSecs / 60);</b>
+<b class="fc">&nbsp;        min = (sec / 60) % 60;</b>
+<b class="fc">&nbsp;        sec = sec % 60;</b>
+<b class="fc">&nbsp;        rounded = (int) Math.floor(min);</b>
+<b class="fc">&nbsp;        String timeString = String.format(&quot;%d:%.0f&quot;, rounded, sec);</b>
+<b class="fc">&nbsp;        return timeString;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Increments the elapsed time of this game by 1 second .
+&nbsp;     */
+&nbsp;    public void incrementTime() {
+<b class="fc">&nbsp;        this.time = this.time + 1_000_000_000;</b>
+&nbsp;    } // increment by 1 second (expressed in nanosec)
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds 120 score earned from Bonus Reward to total score.
+&nbsp;     */
+&nbsp;    public void addBonusRewardToScore() {
+<b class="fc">&nbsp;        this.score += 120;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds 60 score earned from Regular Reward to total score.
+&nbsp;     */
+&nbsp;    public void addRewardToScore() {
+<b class="fc">&nbsp;        this.score += 60;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the number of keys collected to 0.
+&nbsp;     */
+&nbsp;    public void resetKeys() {
+<b class="fc">&nbsp;        this.keysCollected = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Increments the number of keys collected by 1.
+&nbsp;     */
+&nbsp;    public void incrementKeysCollected() {
+<b class="fc">&nbsp;        this.keysCollected = this.keysCollected + 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the number of keys collected.
+&nbsp;     *
+&nbsp;     * @return the number of keys collected from this game.
+&nbsp;     */
+&nbsp;    public int getKeysCollected() {
+<b class="fc">&nbsp;        return this.keysCollected;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if the player gets hit by the deep fryer.
+&nbsp;     *
+&nbsp;     * @return True if stunned, False otherwise.
+&nbsp;     */
+&nbsp;    public boolean isPlayerStunned() {
+<b class="fc">&nbsp;        checkIfTimeElapsed();</b>
+<b class="fc">&nbsp;        return playerStun;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Un-stun player after stun time has passed
+&nbsp;     */
+&nbsp;    private void checkIfTimeElapsed() {
+<b class="fc">&nbsp;        if ((this.time - stunTime) / 1_000_000_000 &gt;= 100) {</b>
+<b class="fc">&nbsp;            unStunPlayer();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new stun player and sets its stun state to True
+&nbsp;     * and time to the 0.
+&nbsp;     */
+&nbsp;    public void stunPlayer() {
+<b class="fc">&nbsp;        this.playerStun = true;</b>
+<b class="fc">&nbsp;        this.stunTime = this.time;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reactivate player by setting this player&#39;s stun state to False.
+&nbsp;     */
+&nbsp;    public void unStunPlayer() {
+<b class="fc">&nbsp;        this.playerStun = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the level of this game.
+&nbsp;     *
+&nbsp;     * @return the level of this game.
+&nbsp;     */
+&nbsp;    public int getLevelNum() {
+<b class="fc">&nbsp;        return this.levelNum;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the level of this game to a new number.
+&nbsp;     *
+&nbsp;     * @param num - new level of the game
+&nbsp;     */
+&nbsp;    public void setLevelNum(int num) {
+<b class="fc">&nbsp;        this.levelNum = num;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the level of this game to 0.
+&nbsp;     */
+&nbsp;    public void resetLevelNum() {
+<b class="fc">&nbsp;        this.levelNum = 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Resets the score back to 100
+&nbsp;     */
+&nbsp;    public void resetScore() {
+<b class="fc">&nbsp;        this.score = 100;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Resets the time back to 0
+&nbsp;     */
+&nbsp;    public void resetTime() {
+<b class="fc">&nbsp;        this.totalSecs = 0;</b>
+<b class="fc">&nbsp;        this.sec = 0;</b>
+<b class="fc">&nbsp;        this.min = 0;</b>
+<b class="fc">&nbsp;        this.time = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks to see if the the potato friend bonus reward should respawn
+&nbsp;     * 
+&nbsp;     * @return returns true or false depending on the amount of time passed
+&nbsp;     */
+&nbsp;    public boolean checkIfPotatoFriendRespawn() {
+<b class="fc">&nbsp;        return (time / 1_000_000_000) % 500 == 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the number of tiles that fits in the width of the gamescreen (32)
+&nbsp;     * @return  : returns 32
+&nbsp;     */
+&nbsp;    public int getPlayableWidth() {
+<b class="fc">&nbsp;        return playableWidth;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the number of tiles that fits in the height of the gamescreen (24)
+&nbsp;     * @return  : returns 24
+&nbsp;     */
+&nbsp;    public int getPlayableHeight() {
+<b class="fc">&nbsp;        return playableHeight;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the gamescreen max pixel width, which is 1224
+&nbsp;     * @return  :  returns 1224
+&nbsp;     */
+&nbsp;    public int getGamePixelWidth() {
+<b class="fc">&nbsp;        return gamePixelWidth;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the gamescreen max pixel height, which is 768
+&nbsp;     * @return  :  returns 768
+&nbsp;     */
+&nbsp;    public int getGamePixelHeight() {
+<b class="fc">&nbsp;        return gamePixelHeight;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of frames per second (60)
+&nbsp;     * @return  : returns 60
+&nbsp;     */
+&nbsp;    public double getFramesPerSecond() {
+<b class="fc">&nbsp;        return framesPerSecond;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  Gets the players x start coordinate
+&nbsp;     * @return  : return 94
+&nbsp;     */
+&nbsp;    public int getPlayerStartXCoordinate() {
+<b class="fc">&nbsp;        return playerStartXCoordinate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  Gets the players y start coordinate
+&nbsp;     * @return   : returns 700
+&nbsp;     */
+&nbsp;    public int getPlayerStartYCoordinate() {
+<b class="fc">&nbsp;        return playerStartYCoordinate;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

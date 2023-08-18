@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PauseScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: PauseScreen (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PauseScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import group19.GameLoop.GameLoop;
+&nbsp;import group19.GameLoop.GameState;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Creates and paints the Pause screen and its buttons.
+&nbsp; * Able to toggle its buttons on and off, paint its buttons, set its score label,
+&nbsp; * add its score label to the GameState, set its pause flag to true, return its pause flag,
+&nbsp; * and set its Homescreen.
+&nbsp; */
+&nbsp;public class PauseScreen extends JPanel implements ActionListener{
+&nbsp;    //Variables and objects used.
+&nbsp;    private final BufferedImage buff;
+&nbsp;    private final JFrame ui;
+&nbsp;    private final HelpScreen helpS;
+&nbsp;    private final GameState gameState;
+&nbsp;    private final GameLoop gm;
+<b class="nc">&nbsp;    private boolean pauseFlag = true;</b>
+&nbsp;    private HomeScreen homescreen;
+&nbsp;    private JButton resume;
+&nbsp;    private JButton mainmenu;
+&nbsp;    private JButton help;
+&nbsp;    private JLabel scoreL;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the Pausescreen with the given Helpscreen, GameLoop, JFrame, and GameState GUI objects.
+&nbsp;     *
+&nbsp;     * @param hp   : the helpscreen is passed into this class inorder to switch to the helpscreen from a button press.
+&nbsp;     * @param game : used to return back to the gameloop screen.
+&nbsp;     * @param ui   : used to set the UI size.
+&nbsp;     * @param gs   : used to get the games current state information.
+&nbsp;     * @throws IOException throws an exception when an IO error occurs
+&nbsp;     */
+<b class="nc">&nbsp;    public PauseScreen(HelpScreen hp, GameLoop game, JFrame ui, GameState gs) throws IOException {</b>
+&nbsp;        //Set parameters into class variables.
+<b class="nc">&nbsp;        this.gameState = gs;</b>
+<b class="nc">&nbsp;        this.helpS = hp;</b>
+<b class="nc">&nbsp;        this.gm = game;</b>
+<b class="nc">&nbsp;        this.ui = ui;</b>
+&nbsp;
+<b class="nc">&nbsp;        setLayout(null);</b>
+&nbsp;
+&nbsp;        //Print background img
+<b class="nc">&nbsp;        buff = ImageIO.read(getClass().getResourceAsStream(&quot;/paused.jpg&quot;));</b>
+&nbsp;
+&nbsp;        //Add buttons
+<b class="nc">&nbsp;        buttons();</b>
+&nbsp;        //Add label
+<b class="nc">&nbsp;        addScoreLabel();</b>
+<b class="nc">&nbsp;        setFocusable(true);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Paints the UI screen with the background image.
+&nbsp;     *
+&nbsp;     * @param g - given graphic
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void paintComponent(Graphics g) {
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+<b class="nc">&nbsp;        g.drawImage(buff, 0, 0, 1008, 729, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Toggles the Pausescreen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     *
+&nbsp;     * @param onoff toggles the Pausescreen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off
+&nbsp;     */
+&nbsp;    public void togglebuttons(String onoff) {
+<b class="nc">&nbsp;        if (onoff == &quot;ON&quot;) {</b>
+<b class="nc">&nbsp;            ((Button) resume).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) mainmenu).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) help).setEnabledAndVisibleON();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            ((Button) resume).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) mainmenu).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) help).setEnabledAndVisibleOFF();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the Pausescreen&#39;s buttons.
+&nbsp;     */
+&nbsp;    public void buttons() {
+<b class="nc">&nbsp;        resume = new Button(&quot;RESUME&quot;, this, 400, 410, 200, 100);</b>
+<b class="nc">&nbsp;        mainmenu = new Button(&quot;MAIN MENU&quot;, this, 140, 500, 200, 100);</b>
+<b class="nc">&nbsp;        help = new Button(&quot;HELP&quot;, this, 660, 500, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the player presses the resume, mainmenu, and help buttons in the panel. 
+&nbsp;     *  This method either opens the help screen, resumes the gamescreen, or returns to main menu depending on what the player presses.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;        String pressed = e.getActionCommand();</b>
+<b class="nc">&nbsp;        if (pressed.equals(&quot;RESUME&quot;)) {</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            ui.setSize(1224, 807);</b>
+<b class="nc">&nbsp;            gm.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            gm.setVisible(true);</b>
+<b class="nc">&nbsp;            gm.requestFocus();</b>
+<b class="nc">&nbsp;            pauseFlag = false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (pressed.equals(&quot;MAIN MENU&quot;)){</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            homescreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            homescreen.setVisible(true);</b>
+<b class="nc">&nbsp;            homescreen.requestFocus();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (pressed.equals(&quot;HELP&quot;)){</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            helpS.setOption(2);</b>
+<b class="nc">&nbsp;            helpS.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            helpS.setVisible(true);</b>
+<b class="nc">&nbsp;            helpS.requestFocus();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a score label to the Pause screen.
+&nbsp;     */
+&nbsp;    public void addScoreLabel() {
+<b class="nc">&nbsp;        scoreL = new Label(&quot; Score: &quot; + gameState.getScore(), this, 400, 200, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Pausescreen&#39;s label to the score from the GameState.
+&nbsp;     */
+&nbsp;    public void setLabel() {
+<b class="nc">&nbsp;        scoreL.setText(&quot; Score: &quot; + gameState.getScore());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the pause flag, which is either true or false.
+&nbsp;     *
+&nbsp;     * @return either true or false
+&nbsp;     */
+&nbsp;    public boolean getPauseFlag() {
+<b class="nc">&nbsp;        return pauseFlag;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the pausescreen&#39;s homescreen object to the parameter title.
+&nbsp;     *
+&nbsp;     * @param title
+&nbsp;     */
+&nbsp;    public void setTitle(HomeScreen title) {
+<b class="nc">&nbsp;        this.homescreen = title;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Pausescreen&#39;s pause flag to true.
+&nbsp;     */
+&nbsp;    public void setPause() {
+<b class="nc">&nbsp;        this.pauseFlag = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the pause sreen pause flag to false.
+&nbsp;     */
+&nbsp;    public void setPauseFalse() {
+<b class="nc">&nbsp;        this.pauseFlag = false;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

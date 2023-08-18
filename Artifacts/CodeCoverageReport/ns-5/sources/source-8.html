@@ -1,0 +1,201 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UICreator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: UICreator (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UICreator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import group19.GameLoop.GameLoop;
+&nbsp;import group19.GameLoop.GameState;
+&nbsp;import group19.GameLoop.Music;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Creates the GUI panels/objects of the game and initializes them.
+&nbsp; */
+&nbsp;public class UICreator {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * When the constructor is called it creates all the GUI components of the game.
+&nbsp;     *
+&nbsp;     * @throws IOException throws an exception when an IO error occurs
+&nbsp;     */
+<b class="nc">&nbsp;    public UICreator() throws IOException {</b>
+&nbsp;        //Create holding frame.
+<b class="nc">&nbsp;        JFrame ui = new JFrame();</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.setLayout(null);</b>
+<b class="nc">&nbsp;        ui.setTitle(&quot;Spud Sprint&quot;);</b>
+&nbsp;
+&nbsp;        //Create all panel objects
+<b class="nc">&nbsp;        GameState gameState = new GameState();</b>
+<b class="nc">&nbsp;        HelpScreen helpScreen = new HelpScreen();</b>
+<b class="nc">&nbsp;        GameLoop game = new GameLoop(ui, gameState);</b>
+<b class="nc">&nbsp;        PauseScreen pause = new PauseScreen(helpScreen, game, ui, gameState);</b>
+<b class="nc">&nbsp;        DifficultyScreen diffscreen = new DifficultyScreen(game, ui, pause);</b>
+<b class="nc">&nbsp;        HomeScreen title = new HomeScreen(helpScreen, diffscreen);</b>
+<b class="nc">&nbsp;        WinScreen win = new WinScreen(game, ui, gameState);</b>
+<b class="nc">&nbsp;        LoseScreen lose = new LoseScreen(game, diffscreen, helpScreen, ui, gameState);</b>
+&nbsp;
+<b class="nc">&nbsp;        getterSetter(helpScreen, game, pause, diffscreen, title, win, lose);</b>
+<b class="nc">&nbsp;        setBounds(helpScreen, game, pause, diffscreen, title, win, lose);</b>
+<b class="nc">&nbsp;        addPanels(ui, helpScreen, game, pause, diffscreen, title, win, lose);</b>
+<b class="nc">&nbsp;        initGameWindow(ui);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Add all panels to the screen.
+&nbsp;    private static void addPanels(JFrame ui, HelpScreen helpScreen, GameLoop game, PauseScreen pause, DifficultyScreen diffscreen, HomeScreen title, WinScreen win, LoseScreen lose) {
+<b class="nc">&nbsp;        ui.add(lose);</b>
+<b class="nc">&nbsp;        ui.add(win);</b>
+<b class="nc">&nbsp;        ui.add(pause);</b>
+<b class="nc">&nbsp;        ui.add(diffscreen);</b>
+<b class="nc">&nbsp;        ui.add(helpScreen);</b>
+<b class="nc">&nbsp;        ui.add(game);</b>
+<b class="nc">&nbsp;        ui.add(title);</b>
+<b class="nc">&nbsp;        ui.pack();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Set bounds of each panel
+&nbsp;    private static void setBounds(HelpScreen helpScreen, GameLoop game, PauseScreen pause, DifficultyScreen diffscreen, HomeScreen title, WinScreen win, LoseScreen lose) {
+<b class="nc">&nbsp;        pause.setBounds(0, 0, 1024, 768);</b>
+<b class="nc">&nbsp;        title.setBounds(0, 0, 1024, 768);</b>
+<b class="nc">&nbsp;        helpScreen.setBounds(0, 0, 1024, 768);</b>
+<b class="nc">&nbsp;        diffscreen.setBounds(0, 0, 1024, 768);</b>
+<b class="nc">&nbsp;        game.setBounds(0, 0, 1224, 768);</b>
+<b class="nc">&nbsp;        win.setBounds(0, 0, 1024, 768);</b>
+<b class="nc">&nbsp;        lose.setBounds(0, 0, 1024, 768);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //Object getter and setter methods
+&nbsp;    private static void getterSetter(HelpScreen helpScreen, GameLoop game, PauseScreen pause, DifficultyScreen diffscreen, HomeScreen title, WinScreen win, LoseScreen lose) {
+<b class="nc">&nbsp;        helpScreen.setTitle(title);</b>
+<b class="nc">&nbsp;        diffscreen.setTitle(title);</b>
+<b class="nc">&nbsp;        pause.setTitle(title);</b>
+<b class="nc">&nbsp;        win.setTitle(title);</b>
+<b class="nc">&nbsp;        helpScreen.setPause(pause);</b>
+<b class="nc">&nbsp;        game.getPause(pause);</b>
+<b class="nc">&nbsp;        game.getWin(win);</b>
+<b class="nc">&nbsp;        helpScreen.setLose(lose);</b>
+<b class="nc">&nbsp;        game.getLose(lose);</b>
+<b class="nc">&nbsp;        lose.setTitle(title);</b>
+<b class="nc">&nbsp;        win.setPause(pause);</b>
+<b class="nc">&nbsp;        lose.setPause(pause);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * initialize the game&#39;s main holding frame.
+&nbsp;     * The music is also created and ran here.
+&nbsp;     *
+&nbsp;     * @param ui :the UI frame which holds everything, this is used to finish creating the frame.
+&nbsp;     */
+&nbsp;    public static void initGameWindow(JFrame ui) {
+<b class="nc">&nbsp;        Music bg = new Music();</b>
+<b class="nc">&nbsp;        bg.playMusic();</b>
+<b class="nc">&nbsp;        ui.setDefaultCloseOperation(ui.EXIT_ON_CLOSE);</b>
+<b class="nc">&nbsp;        ui.setResizable(false);</b>
+<b class="nc">&nbsp;        ui.setSize(1024, 768);</b>
+<b class="nc">&nbsp;        ui.setVisible(true);</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

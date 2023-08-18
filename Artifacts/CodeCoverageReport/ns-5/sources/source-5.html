@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Label</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: Label (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Label</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; *  This class is for creating the various JLabels that the game uses.
+&nbsp; */
+&nbsp;public class Label extends JLabel{
+&nbsp;    /**
+&nbsp;     * This constructor creates the JLabel with correct options.
+&nbsp;     * 
+&nbsp;     * @param textInput        : The JLabels initial displayed text.
+&nbsp;     * @param panelToAdd       : The Panel the label gets added to.
+&nbsp;     * @param x                : the x - coordinate of the label.
+&nbsp;     * @param y                : the y - coordinate of the label.
+&nbsp;     * @param width            : the width of the JLabel
+&nbsp;     * @param height           : the height of the JLabel
+&nbsp;     */
+<b class="fc">&nbsp;    public Label(String textInput, JPanel panelToAdd, Integer x, Integer y, Integer width, Integer height) {</b>
+<b class="fc">&nbsp;        setText(textInput);</b>
+<b class="fc">&nbsp;        setOpaque(true);</b>
+<b class="fc">&nbsp;        setBackground(new Color(170, 92, 28, 255));</b>
+<b class="fc">&nbsp;        setForeground(Color.white);</b>
+<b class="fc">&nbsp;        setBorder(BorderFactory.createRaisedBevelBorder());</b>
+<b class="fc">&nbsp;        setFont(new Font(&quot;SansSerif&quot;, Font.BOLD, 28));</b>
+<b class="fc">&nbsp;        setBounds(x, y, width, height);</b>
+<b class="fc">&nbsp;        panelToAdd.add(this);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

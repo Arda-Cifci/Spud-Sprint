@@ -1,0 +1,385 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CollisionCheck</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.GameLoop</a>
+</div>
+
+<h1>Coverage Summary for Class: CollisionCheck (group19.GameLoop)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CollisionCheck</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    59.7%
+  </span>
+  <span class="absValue">
+    (46/77)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (108/117)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CollisionCheck$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    59.7%
+  </span>
+  <span class="absValue">
+    (46/77)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.4%
+  </span>
+  <span class="absValue">
+    (109/118)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.GameLoop;
+&nbsp;
+&nbsp;import group19.Board.Board;
+&nbsp;import group19.Entities.DoorKey;
+&nbsp;import group19.Entities.DeepFryer;
+&nbsp;import group19.Entities.Entity;
+&nbsp;import group19.Entities.FryCook;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;/**
+&nbsp; * A utility class that checks collisions between entities, and other entities,
+&nbsp; * and entities and the board.
+&nbsp; */
+&nbsp;
+&nbsp;public class CollisionCheck {
+<b class="fc">&nbsp;    public CollisionCheck(int tileSize) {</b>
+<b class="fc">&nbsp;        this.tileSize = tileSize;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private final int tileSize;
+<b class="fc">&nbsp;    private final int solidTopEdge =  16;</b>
+<b class="fc">&nbsp;    private final int solidLeftEdge = 12;</b>
+<b class="fc">&nbsp;    private final int solidRightEdge = 24;</b>
+<b class="fc">&nbsp;    private final int solidBottomEdge = 28;</b>
+&nbsp;    /**
+&nbsp;     * Checks if an entity collided with fry cook
+&nbsp;     *
+&nbsp;     * @return True if collided, False otherwise
+&nbsp;     */
+&nbsp;    public boolean checkEntityFryCookCollision(Entity singleEntity, ArrayList&lt;FryCook&gt; fryCookList) {
+<b class="fc">&nbsp;        int firstXTile = singleEntity.getX();</b>
+<b class="fc">&nbsp;        int firstYTile = singleEntity.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int playerTopTiled = firstYTile / tileSize;</b>
+<b class="fc">&nbsp;        int playerLeftTiled = firstXTile / tileSize;</b>
+<b class="fc">&nbsp;        int playerRightTiled = firstXTile / tileSize;</b>
+<b class="fc">&nbsp;        int playerBottomTiled = firstYTile / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (FryCook fryCook : fryCookList) {</b>
+<b class="fc">&nbsp;            int entityXTile = fryCook.getX() / tileSize;</b>
+<b class="fc">&nbsp;            int entityYTile = fryCook.getY() / tileSize;</b>
+<b class="pc">&nbsp;            if ((playerTopTiled == entityYTile &amp;&amp; playerBottomTiled == entityYTile) &amp;&amp;</b>
+&nbsp;                    (playerLeftTiled == entityXTile &amp;&amp; playerRightTiled == entityXTile)) {
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an entity can move
+&nbsp;     *
+&nbsp;     * @return True if can move, False otherwise
+&nbsp;     */
+&nbsp;
+&nbsp;    public boolean checkIfEntityCanMove(Direction direction, Entity entity, Board board) {
+<b class="fc">&nbsp;        int entityXTile = entity.getX();</b>
+<b class="fc">&nbsp;        int entityYTile = entity.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopEdge = entityYTile + solidTopEdge;</b>
+<b class="fc">&nbsp;        int entityLeftEdge = entityXTile + solidLeftEdge;</b>
+<b class="fc">&nbsp;        int entityRightEdge = entityXTile + solidRightEdge;</b>
+<b class="fc">&nbsp;        int entityBottomEdge = entityYTile + solidBottomEdge;</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopTiled = entityTopEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityLeftTiled = entityLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityRightTiled = entityRightEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityBottomTiled = entityBottomEdge / tileSize;</b>
+&nbsp;
+<b class="pc">&nbsp;        switch (direction) {</b>
+&nbsp;            case DOWN -&gt; {
+<b class="fc">&nbsp;                entityBottomTiled = (entityBottomEdge + 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(entityLeftTiled, entityBottomTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(entityRightTiled, entityBottomTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case UP -&gt; {
+<b class="fc">&nbsp;                entityTopTiled = (entityTopEdge - 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(entityLeftTiled, entityTopTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(entityRightTiled, entityTopTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case LEFT -&gt; {
+<b class="fc">&nbsp;                entityLeftTiled = (entityLeftEdge - 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(entityLeftTiled, entityTopTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(entityLeftTiled, entityBottomTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case RIGHT -&gt; {
+<b class="fc">&nbsp;                entityRightTiled = (entityRightEdge + 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(entityRightTiled, entityBottomTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(entityRightTiled, entityTopTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Checks if an entity collides with deep fryer
+&nbsp;     * Sets deep fryer to triggered to disappear from map
+&nbsp;     *
+&nbsp;     * @return True if collision occurs, False otherwise
+&nbsp;     */
+&nbsp;
+&nbsp;    public boolean checkEntityCollisionDeepFryer(Entity entity, ArrayList&lt;DeepFryer&gt; deepFryers) {
+<b class="fc">&nbsp;        int entityXTile = entity.getX();</b>
+<b class="fc">&nbsp;        int entityYTile = entity.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopEdge = entityYTile + solidTopEdge;</b>
+<b class="fc">&nbsp;        int entityLeftEdge = entityXTile + solidLeftEdge;</b>
+<b class="fc">&nbsp;        int entityRightEdge = entityXTile + solidRightEdge;</b>
+<b class="fc">&nbsp;        int playerBottomEdge = entityYTile + solidBottomEdge;</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopTiled = entityTopEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityLeftTiled = entityLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityRightTiled = entityRightEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityBottomTiled = playerBottomEdge / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (DeepFryer deepFryer : deepFryers) {</b>
+<b class="fc">&nbsp;            int deepFryerXTile = deepFryer.getX() / tileSize;</b>
+<b class="fc">&nbsp;            int deepFryerYTile = deepFryer.getY() / tileSize;</b>
+<b class="pc">&nbsp;            if ((entityTopTiled == deepFryerYTile &amp;&amp; entityBottomTiled == deepFryerYTile)</b>
+&nbsp;                    &amp;&amp; (entityLeftTiled == deepFryerXTile &amp;&amp; entityRightTiled == deepFryerXTile
+<b class="pc">&nbsp;                    &amp;&amp; !deepFryer.getHasBeenTriggered())) {</b>
+<b class="fc">&nbsp;                deepFryer.triggerFryer();</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an entity collides with a door key
+&nbsp;     * Sets door key to collected to disappear from map
+&nbsp;     *
+&nbsp;     * @return True if collision occurs, False otherwise
+&nbsp;     */
+&nbsp;
+&nbsp;    public boolean checkEntityCollisionKey(Entity entity, ArrayList&lt;DoorKey&gt; doorKeys) {
+<b class="fc">&nbsp;        int entityXTile = entity.getX();</b>
+<b class="fc">&nbsp;        int entityYTile = entity.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopEdge = entityYTile + solidTopEdge;</b>
+<b class="fc">&nbsp;        int entityLeftEdge = entityXTile + solidLeftEdge;</b>
+<b class="fc">&nbsp;        int entityRightEdge = entityXTile + solidRightEdge;</b>
+<b class="fc">&nbsp;        int entityBottomEdge = entityYTile + solidBottomEdge;</b>
+&nbsp;
+<b class="fc">&nbsp;        int entityTopTiled = entityTopEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityLeftTiled = entityLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityRightTiled = entityRightEdge / tileSize;</b>
+<b class="fc">&nbsp;        int entityBottomTiled = entityBottomEdge / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (DoorKey doorkey : doorKeys) {</b>
+<b class="fc">&nbsp;            int doorKeyXTile = doorkey.getX() / tileSize;</b>
+<b class="fc">&nbsp;            int doorKeyYTile = doorkey.getY() / tileSize;</b>
+&nbsp;
+<b class="pc">&nbsp;            if ((entityTopTiled == doorKeyYTile &amp;&amp; entityBottomTiled == doorKeyYTile)</b>
+<b class="pc">&nbsp;                    &amp;&amp; (entityLeftTiled == doorKeyXTile &amp;&amp; entityRightTiled == doorKeyXTile &amp;&amp; !doorkey.getHasBeenCollected())) {</b>
+<b class="fc">&nbsp;                doorkey.setToCollected();</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an entity collides with an entity that is static
+&nbsp;     *
+&nbsp;     * @return True if collision occurs, False otherwise
+&nbsp;     */
+&nbsp;    public boolean checkIfMovingEntityCollidesWithStaticEntity(Entity first, Entity second) {
+<b class="fc">&nbsp;        int firstXTile = first.getX();</b>
+<b class="fc">&nbsp;        int firstYTile = first.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int firstTopEdge = firstYTile + solidTopEdge;</b>
+<b class="fc">&nbsp;        int firstLeftEdge = firstXTile + solidLeftEdge;</b>
+<b class="fc">&nbsp;        int firstRightEdge = firstXTile + solidRightEdge;</b>
+<b class="fc">&nbsp;        int firstBottomEdge = firstYTile + solidBottomEdge;</b>
+&nbsp;
+<b class="fc">&nbsp;        int firstTopTiled = firstTopEdge / tileSize;</b>
+<b class="fc">&nbsp;        int firstLeftTiled = firstLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;        int firstRightTiled = firstRightEdge / tileSize;</b>
+<b class="fc">&nbsp;        int firstBottomTiled = firstBottomEdge / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        int secondFriendXTile = second.getX() / tileSize;</b>
+<b class="fc">&nbsp;        int secondFriendYTile = second.getY() / tileSize;</b>
+&nbsp;
+<b class="pc">&nbsp;        return (firstTopTiled == secondFriendYTile &amp;&amp; firstBottomTiled == secondFriendYTile)</b>
+&nbsp;                &amp;&amp; firstLeftTiled == secondFriendXTile &amp;&amp; firstRightTiled == secondFriendXTile;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an entity collides with the door
+&nbsp;     *
+&nbsp;     * @return True if collision occurs, False otherwise
+&nbsp;     */
+&nbsp;    public boolean checkPlayerCollisionDoorOpen(Entity entity, int difficulty, boolean doorOpen, int[] saveDoor) {
+&nbsp;
+<b class="fc">&nbsp;        int playerXTile = entity.getX();</b>
+<b class="fc">&nbsp;        int playerYTile = entity.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int playerTopEdge = playerYTile + solidTopEdge;</b>
+<b class="fc">&nbsp;        int playerLeftEdge = playerXTile + solidTopEdge;</b>
+&nbsp;
+&nbsp;        int playerLeftTiled;
+&nbsp;        int playerTopTiled;
+<b class="pc">&nbsp;        switch(difficulty) {</b>
+&nbsp;            case 1, 6, 2 -&gt; {
+<b class="fc">&nbsp;                playerTopTiled = (playerTopEdge / tileSize) - 1;</b>
+<b class="fc">&nbsp;                playerLeftTiled = playerLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case 3, 9, 8, 4 -&gt; {
+<b class="nc">&nbsp;                playerTopTiled = (playerTopEdge / tileSize);</b>
+<b class="nc">&nbsp;                playerLeftTiled = playerLeftEdge / tileSize + 1;</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            case 5, 7 -&gt; {
+<b class="nc">&nbsp;                playerTopTiled = (playerTopEdge / tileSize) + 1;</b>
+<b class="nc">&nbsp;                playerLeftTiled = playerLeftEdge / tileSize;</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            default -&gt; {
+<b class="nc">&nbsp;                playerLeftTiled = playerLeftEdge / tileSize;</b>
+<b class="nc">&nbsp;                playerTopTiled = (playerTopEdge / tileSize);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int doorX = saveDoor[0];</b>
+<b class="fc">&nbsp;        int doorY = saveDoor[1];</b>
+&nbsp;
+<b class="pc">&nbsp;        return (playerLeftTiled == doorX) &amp;&amp; (playerTopTiled == doorY) &amp;&amp; doorOpen;</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,287 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > WinScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: WinScreen (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WinScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import group19.GameLoop.GameLoop;
+&nbsp;import group19.GameLoop.GameState;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Creates and paints the Winscreen and its buttons.
+&nbsp; * Able to toggle its buttons on and off, paint its buttons, set its score label,
+&nbsp; * add its score label to the GameState, set its timer label, add its timer label to the GameState,
+&nbsp; * and set its Homescreen.
+&nbsp; */
+&nbsp;public class WinScreen extends JPanel implements ActionListener {
+&nbsp;    //Variables and objets used.
+&nbsp;    private final BufferedImage buff;
+&nbsp;    private final JFrame ui;
+&nbsp;    private final GameLoop gm;
+&nbsp;    private final GameState gameState;
+&nbsp;    private HomeScreen homescreen;
+&nbsp;    private JButton replay;
+&nbsp;    private JButton mainmenu;
+&nbsp;    private JLabel scoreL;
+&nbsp;    private JLabel timerL;
+&nbsp;    private PauseScreen pause;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new Winscreen with the given GameLoop, Difficultyscreen, JFrame, and GameState.
+&nbsp;     *
+&nbsp;     * @param game : used to return back to the gameloop screen and restart the game.
+&nbsp;     * @param ui   : used for resizeing the screen
+&nbsp;     * @param gs   : used to get the games current state in order to reset the game and displaying final winning scores.
+&nbsp;     * @throws IOException
+&nbsp;     */
+<b class="nc">&nbsp;    public WinScreen(GameLoop game, JFrame ui, GameState gs) throws IOException {</b>
+&nbsp;        //Set parameters into class variables.
+<b class="nc">&nbsp;        this.gameState = gs;</b>
+<b class="nc">&nbsp;        this.gm = game;</b>
+<b class="nc">&nbsp;        this.ui = ui;</b>
+&nbsp;
+<b class="nc">&nbsp;        setLayout(null);</b>
+&nbsp;
+&nbsp;        //Print background img.
+<b class="nc">&nbsp;        buff = ImageIO.read(getClass().getResourceAsStream(&quot;/youWin.jpg&quot;));</b>
+&nbsp;
+&nbsp;        //Add buttons
+<b class="nc">&nbsp;        buttons();</b>
+&nbsp;        //Add labels
+<b class="nc">&nbsp;        addLabels();</b>
+<b class="nc">&nbsp;        setFocusable(true);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Paints the UI screen with the background image.
+&nbsp;     *
+&nbsp;     * @param g - given graphic
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void paintComponent(Graphics g) {
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+<b class="nc">&nbsp;        g.drawImage(buff, 0, 0, 1008, 729, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Toggles the Winscreen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     *
+&nbsp;     * @param onoff toggles the Winscreen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off
+&nbsp;     */
+&nbsp;    public void togglebuttons(String onoff) {
+<b class="nc">&nbsp;        if (onoff == &quot;ON&quot;) {</b>
+<b class="nc">&nbsp;            ((Button) replay).setEnabledAndVisibleON();</b>
+<b class="nc">&nbsp;            ((Button) mainmenu).setEnabledAndVisibleON();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            ((Button) replay).setEnabledAndVisibleOFF();</b>
+<b class="nc">&nbsp;            ((Button) mainmenu).setEnabledAndVisibleOFF();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the Wincreen&#39;s buttons.
+&nbsp;     */
+&nbsp;    public void buttons() {
+<b class="nc">&nbsp;        replay = new Button(&quot;REPLAY&quot;, this, 250, 400, 200, 100);</b>
+<b class="nc">&nbsp;        mainmenu = new Button(&quot;MAIN MENU&quot;, this, 550, 400, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the player presses the replay or mainmenu buttons in the panel. 
+&nbsp;     *  This method either opens a new gamescreen, or returns to main menu depending on what the player presses.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;        String pressed = e.getActionCommand();</b>
+<b class="nc">&nbsp;        if (pressed.equals(&quot;REPLAY&quot;)) {</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            pause.setPauseFalse();</b>
+<b class="nc">&nbsp;            gm.unSetPauseFlag();</b>
+<b class="nc">&nbsp;            gm.reset();</b>
+<b class="nc">&nbsp;            ui.setSize(1224, 807);</b>
+<b class="nc">&nbsp;            if (gameState.getDifficulty() == 3) {</b>
+<b class="nc">&nbsp;                gm.setGameDifficultyState(1);</b>
+<b class="nc">&nbsp;            } else if (gameState.getDifficulty() == 6) {</b>
+<b class="nc">&nbsp;                gm.setGameDifficultyState(4);</b>
+<b class="nc">&nbsp;            } else if (gameState.getDifficulty() == 9) {</b>
+<b class="nc">&nbsp;                gm.setGameDifficultyState(7);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            gm.initMap();</b>
+<b class="nc">&nbsp;            gm.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            gm.setVisible(true);</b>
+<b class="nc">&nbsp;            gm.requestFocus();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (pressed.equals(&quot;MAIN MENU&quot;)){</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            homescreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            homescreen.setVisible(true);</b>
+<b class="nc">&nbsp;            homescreen.requestFocus();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a score label to the win screen.
+&nbsp;     */
+&nbsp;    public void addLabels() {
+<b class="nc">&nbsp;        scoreL = new Label(&quot; Score: &quot; + gameState.getScore(), this, 200, 200, 200, 100);</b>
+<b class="nc">&nbsp;        timerL = new Label(&quot; Time: &quot; + gameState.getTime(), this, 600, 200, 200, 100);</b>
+&nbsp;    }
+&nbsp;  
+&nbsp;    /**
+&nbsp;     * Set the Winscreens&#39;s homescreen object to the parameter title.
+&nbsp;     *
+&nbsp;     * @param title title to set
+&nbsp;     */
+&nbsp;    public void setTitle(HomeScreen title) {
+<b class="nc">&nbsp;        this.homescreen = title;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Winscreen&#39;s score label to the score from the GameState.
+&nbsp;     */
+&nbsp;    public void setScore() {
+<b class="nc">&nbsp;        scoreL.setText(&quot; Score: &quot; + gameState.getScore());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Winscreen&#39;s timer label to the timer from the GameState.
+&nbsp;     */
+&nbsp;    public void setTimer() {
+<b class="nc">&nbsp;        timerL.setText(&quot; Time: &quot; + gameState.getTime());</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the winscreen pausescreen object to the parameter ps.
+&nbsp;     *
+&nbsp;     * @param ps pausescreen to set
+&nbsp;     */
+&nbsp;    public void setPause(PauseScreen ps) {
+<b class="nc">&nbsp;        this.pause = ps;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

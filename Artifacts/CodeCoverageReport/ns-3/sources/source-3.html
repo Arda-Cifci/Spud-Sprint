@@ -1,0 +1,887 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GameLoop</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.GameLoop</a>
+</div>
+
+<h1>Coverage Summary for Class: GameLoop (group19.GameLoop)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameLoop</td>
+<td class="coverageStat">
+  <span class="percent">
+    45.9%
+  </span>
+  <span class="absValue">
+    (17/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    17.9%
+  </span>
+  <span class="absValue">
+    (26/145)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    34.2%
+  </span>
+  <span class="absValue">
+    (116/339)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameLoop$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    47.4%
+  </span>
+  <span class="absValue">
+    (18/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    17.9%
+  </span>
+  <span class="absValue">
+    (26/145)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    34.4%
+  </span>
+  <span class="absValue">
+    (117/340)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.GameLoop;
+&nbsp;
+&nbsp;import group19.Board.Board;
+&nbsp;import group19.Board.BoardSpriteManager;
+&nbsp;import group19.Entities.DoorKey;
+&nbsp;import group19.Entities.DeepFryer;
+&nbsp;import group19.Entities.FryCook;
+&nbsp;import group19.Entities.PlayerCharacter;
+&nbsp;import group19.Entities.PotatoFriend;
+&nbsp;import group19.Entities.EntityFactory;
+&nbsp;import group19.InputHandler.CharacterCommand;
+&nbsp;import group19.InputHandler.InputHandler;
+&nbsp;import group19.UIScreens.LoseScreen;
+&nbsp;import group19.UIScreens.PauseScreen;
+&nbsp;import group19.UIScreens.WinScreen;
+&nbsp;import group19.UIScreens.Label;
+&nbsp;import group19.UIScreens.Button;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;import static java.lang.System.exit;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class represents the game screen UI and the game loop which
+&nbsp; * loops through the game logic at each tick to display and interpret all things
+&nbsp; * that are needed to run the game. 
+&nbsp; */
+&nbsp;public class GameLoop extends JPanel implements Runnable, ActionListener {
+&nbsp;    // Variables and objects used.
+<b class="fc">&nbsp;    private final int tileSize = 32;</b>
+<b class="fc">&nbsp;    private final BoardSpriteManager boardSpriteManager = new BoardSpriteManager();</b>
+&nbsp;    private final PlayerCharacter playerCharacter;
+&nbsp;    private final JFrame ui;
+&nbsp;    private final GameState gameState;
+<b class="fc">&nbsp;    private final int[] saveDoor = {0, 0};</b>
+<b class="fc">&nbsp;    boolean pauseGameFlag = false;</b>
+&nbsp;    private Thread renderThread;
+<b class="fc">&nbsp;    private InputHandler inputHandler = new InputHandler();</b>
+&nbsp;    private ArrayList&lt;DoorKey&gt; doorKeys;
+&nbsp;    private ArrayList&lt;DeepFryer&gt; deepFryers;
+&nbsp;    private ArrayList&lt;FryCook&gt; fryCooks;
+&nbsp;    private PotatoFriend potatoFriend;
+&nbsp;    private Board board;
+&nbsp;    private JButton pause;
+&nbsp;    private JLabel scoreL;
+&nbsp;    private JLabel timerL;
+&nbsp;    private JLabel levelL;
+&nbsp;    private PauseScreen pausescreen;
+&nbsp;    private WinScreen winscreen;
+&nbsp;    private LoseScreen losescreen;
+<b class="fc">&nbsp;    private boolean nextScreen = false;</b>
+<b class="fc">&nbsp;    private boolean doorOpen = false;</b>
+&nbsp;    private CharacterCommand characterCommand;
+<b class="fc">&nbsp;    private CollisionCheck collisionCheck = new CollisionCheck(tileSize);</b>
+<b class="fc">&nbsp;    private PlayerTracker playerTracker = new PlayerTracker(this);</b>
+&nbsp;    private Direction direction;
+<b class="fc">&nbsp;    private Direction directionTemp = Direction.STILL;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the game loop UI with the given JFrame ui and GameState gs.
+&nbsp;     * Sets visual attributes and add labels
+&nbsp;     *
+&nbsp;     * @param ui - the visual user interface of a game
+&nbsp;     * @param gameState - the game state
+&nbsp;     * @throws IOException if I/O error occurs
+&nbsp;     */
+<b class="fc">&nbsp;    public GameLoop(JFrame ui, GameState gameState) throws IOException {</b>
+<b class="fc">&nbsp;        this.gameState = gameState;</b>
+<b class="fc">&nbsp;        playerCharacter = EntityFactory.makePlayerCharacter(this.gameState.getPlayerStartXCoordinate(), this.gameState.getPlayerStartYCoordinate());</b>
+<b class="fc">&nbsp;        this.ui = ui;</b>
+<b class="fc">&nbsp;        setLayout(null);</b>
+<b class="fc">&nbsp;        this.setBackground(new Color(204, 161, 96));</b>
+<b class="fc">&nbsp;        this.setPreferredSize(new Dimension(this.gameState.getGamePixelWidth(), this.gameState.getGamePixelHeight()));</b>
+<b class="fc">&nbsp;        this.setDoubleBuffered(true);</b>
+<b class="fc">&nbsp;        this.addKeyListener(inputHandler);</b>
+<b class="fc">&nbsp;        this.setFocusable(true);</b>
+<b class="fc">&nbsp;        buttons();</b>
+<b class="fc">&nbsp;        addLabels();</b>
+<b class="fc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method resets the game back to the game start state.
+&nbsp;     */
+&nbsp;    public void reset() {
+<b class="fc">&nbsp;        resetEntityAndKey();</b>
+<b class="fc">&nbsp;        gameState.resetScore();</b>
+<b class="fc">&nbsp;        gameState.resetTime();</b>
+<b class="fc">&nbsp;        timerL.setText(&quot; Time: &quot; + gameState.getTime());</b>
+<b class="fc">&nbsp;        gameState.resetLevelNum();</b>
+<b class="fc">&nbsp;        this.doorOpen = false;</b>
+<b class="fc">&nbsp;        saveDoor[0] = 0;</b>
+<b class="fc">&nbsp;        saveDoor[1] = 0;</b>
+<b class="fc">&nbsp;        nextScreen = false;</b>
+<b class="fc">&nbsp;        inputHandler = new InputHandler();</b>
+<b class="fc">&nbsp;        this.addKeyListener(inputHandler);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  Resets the entities and key objects of the game specifically.
+&nbsp;     */
+&nbsp;    public void resetEntityAndKey(){
+<b class="fc">&nbsp;        playerCharacter.setX(94);</b>
+<b class="fc">&nbsp;        playerCharacter.setY(700);</b>
+<b class="fc">&nbsp;        deepFryers = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        doorKeys = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        fryCooks = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        gameState.resetKeys();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method opens the lose screen if the player hits the moving enemy or goes below 0 score.
+&nbsp;     */
+&nbsp;    public void openLoseScreen(){
+<b class="nc">&nbsp;        resetEntityAndKey();</b>
+<b class="nc">&nbsp;        togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;        ui.setSize(1024, 768);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+<b class="nc">&nbsp;        losescreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;        losescreen.setVisible(true);</b>
+<b class="nc">&nbsp;        losescreen.requestFocus();</b>
+<b class="nc">&nbsp;        gameState.unStunPlayer();</b>
+<b class="nc">&nbsp;        gameState.stunTime = 0;</b>
+<b class="nc">&nbsp;        setPauseFlag();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method checks if the player has a negative score because of the static punishment deepfryer,
+&nbsp;     *  If there is a negative score display lose screen.
+&nbsp;     */
+&nbsp;    public void checkDeadFromFryer(){
+<b class="nc">&nbsp;        if (gameState.getScore() &lt; 0) {</b>
+<b class="nc">&nbsp;            openLoseScreen();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method checks which screen /level should be displayed next during the game 
+&nbsp;     * and sets the scene up accordingly by reseting all entites to correct position. 
+&nbsp;     */
+&nbsp;    public void nextGameScreen(){
+<b class="pc">&nbsp;        if (nextScreen) {</b>
+<b class="fc">&nbsp;            resetEntityAndKey();</b>
+<b class="fc">&nbsp;            nextScreen = false;</b>
+<b class="fc">&nbsp;            doorOpen = false;</b>
+&nbsp;
+<b class="pc">&nbsp;            switch (gameState.getDifficulty()) {</b>
+&nbsp;                case 1 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(2);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(2); </b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                case 2 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(3);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(3);               </b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                case 3, 6, 9 -&gt; {
+<b class="nc">&nbsp;                    togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;                    ui.setSize(1024, 768);</b>
+<b class="nc">&nbsp;                    setVisible(false);</b>
+<b class="nc">&nbsp;                    winscreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;                    winscreen.setVisible(true);</b>
+<b class="nc">&nbsp;                    winscreen.requestFocus();</b>
+<b class="nc">&nbsp;                    setPauseFlag();                 </b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 4 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(5);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(2);</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                case 5 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(6);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(3);</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                case 7 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(8);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(2);    </b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                case 8 -&gt; {
+<b class="fc">&nbsp;                    gameState.setDifficulty(9);</b>
+<b class="fc">&nbsp;                    gameState.setLevelNum(3);   </b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;                default -&gt; {
+&nbsp;                }
+&nbsp;            }
+<b class="pc">&nbsp;            if (gameState.getDifficulty() != 3 || gameState.getDifficulty() != 6 || gameState.getDifficulty() != 9) {</b>
+<b class="fc">&nbsp;                initMap();</b>
+<b class="fc">&nbsp;                render();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Runs one round of a game until paused/won/lost.
+&nbsp;     * Changes the level number and difficulty accordingly.
+&nbsp;     * Displays score, elapsed time, and level number ( # / 3 ), etc
+&nbsp;     */
+&nbsp;    public void run() {
+<b class="nc">&nbsp;        double secondPerFrame = 1000000000 / gameState.getFramesPerSecond();</b>
+<b class="nc">&nbsp;        double timeDelta = 0;</b>
+<b class="nc">&nbsp;        long previousTime = System.nanoTime();</b>
+&nbsp;        long currentTime;
+&nbsp;
+<b class="nc">&nbsp;        while (checkIfPlaying()) {</b>
+&nbsp;
+<b class="nc">&nbsp;            checkDeadFromFryer();</b>
+<b class="nc">&nbsp;            nextGameScreen();</b>
+&nbsp;
+<b class="nc">&nbsp;            pausescreen.setPause();</b>
+&nbsp;
+<b class="nc">&nbsp;            scoreL.setText(&quot; Score: &quot; + gameState.getScore());</b>
+<b class="nc">&nbsp;            timerL.setText(&quot; Time: &quot; + gameState.getTime());</b>
+<b class="nc">&nbsp;            levelL.setText(&quot; Room: &quot; + gameState.getLevelNum() + &quot; / 3&quot;);</b>
+<b class="nc">&nbsp;            winscreen.setScore();</b>
+<b class="nc">&nbsp;            winscreen.setTimer();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (pauseGameFlag) {</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    pauseSpin();</b>
+<b class="nc">&nbsp;                } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                    e.printStackTrace();</b>
+<b class="nc">&nbsp;                    exit(69);</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;                previousTime = System.nanoTime();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            currentTime = System.nanoTime();</b>
+<b class="nc">&nbsp;            timeDelta += (currentTime - previousTime) / secondPerFrame;</b>
+<b class="nc">&nbsp;            previousTime = currentTime;</b>
+<b class="nc">&nbsp;            if (timeDelta &gt;= 1) {</b>
+<b class="nc">&nbsp;                timeDelta--;</b>
+<b class="nc">&nbsp;                updateState();</b>
+<b class="nc">&nbsp;                render();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Pause the current game.
+&nbsp;     *
+&nbsp;     * @throws InterruptedException if a thread is interrupted while it&#39;s sleeping
+&nbsp;     */
+&nbsp;    private void pauseSpin() throws InterruptedException {
+<b class="nc">&nbsp;        while (pauseGameFlag) {</b>
+<b class="nc">&nbsp;            Thread.sleep(1);</b>
+<b class="nc">&nbsp;            setPauseFlagFromScreen(pausescreen.getPauseFlag());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the state of current game.
+&nbsp;     * - Increments elapsed time
+&nbsp;     * - Checks and displays whether player collided with potato friend, keys, or deep fryer
+&nbsp;     * - Changes the game screen if the player collided with the door
+&nbsp;     */
+&nbsp;    private void updateState() {
+<b class="nc">&nbsp;        direction = inputHandler.getDirection();</b>
+&nbsp;
+<b class="nc">&nbsp;        gameState.incrementTime();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (collisionCheck.checkIfEntityCanMove(direction, playerCharacter, board) &amp;&amp; !gameState.isPlayerStunned()) {</b>
+<b class="nc">&nbsp;            characterCommand = inputHandler.getCharacterCommand();</b>
+<b class="nc">&nbsp;            characterCommand.execute(playerCharacter);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        moveFryCooks();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (collisionCheck.checkEntityFryCookCollision(playerCharacter, fryCooks)) {</b>
+<b class="nc">&nbsp;            openLoseScreen();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (collisionCheck.checkIfMovingEntityCollidesWithStaticEntity(playerCharacter, potatoFriend)) {</b>
+<b class="nc">&nbsp;            gameState.addBonusRewardToScore();</b>
+<b class="nc">&nbsp;            int[] XYTiles = getOpenTileCoordinates();</b>
+<b class="nc">&nbsp;            potatoFriend.setPotatoFriendPosition(XYTiles[0], XYTiles[1]);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (collisionCheck.checkEntityCollisionKey(playerCharacter, doorKeys)) {</b>
+<b class="nc">&nbsp;            gameState.incrementKeysCollected();</b>
+<b class="nc">&nbsp;            gameState.addRewardToScore();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (collisionCheck.checkEntityCollisionDeepFryer(playerCharacter, deepFryers)) {</b>
+<b class="nc">&nbsp;            gameState.decrementScore();</b>
+<b class="nc">&nbsp;            gameState.stunPlayer();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (gameState.checkIfPotatoFriendRespawn()) {</b>
+<b class="nc">&nbsp;            int[] XYTiles = getOpenTileCoordinates();</b>
+<b class="nc">&nbsp;            potatoFriend.setPotatoFriendPosition(XYTiles[0], XYTiles[1]);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (collisionCheck.checkPlayerCollisionDoorOpen(playerCharacter, gameState.getDifficulty(),</b>
+&nbsp;                                                        doorOpen,saveDoor)) {
+<b class="nc">&nbsp;            nextScreen = true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Moves fry cooks in general direction of player character.
+&nbsp;     *
+&nbsp;     */
+&nbsp;    private void moveFryCooks() {
+<b class="nc">&nbsp;        for (FryCook fryCook : fryCooks) {</b>
+<b class="nc">&nbsp;                playerTracker.fryCookTrackingPlayerMove(fryCook);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Moves a given fry cook based on a given direction.
+&nbsp;     *
+&nbsp;     * @param fryCook      - given fry cook
+&nbsp;     * @param newDirection - given direction (UP, DOWN, LEFT, RIGHT, or STILL)
+&nbsp;     */
+&nbsp;    public boolean checkFryCookMoveDirection(Direction newDirection, FryCook fryCook) {
+<b class="fc">&nbsp;        int fryCookXTile = fryCook.getX();</b>
+<b class="fc">&nbsp;        int fryCookYTile = fryCook.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;        int fryCookTopEdge = fryCookYTile + 16;</b>
+<b class="fc">&nbsp;        int fryCookLeftEdge = fryCookXTile + 12;</b>
+<b class="fc">&nbsp;        int fryCookRightEdge = fryCookXTile + 24;</b>
+<b class="fc">&nbsp;        int fryCookBottomEdge = fryCookYTile + 28;</b>
+&nbsp;
+<b class="fc">&nbsp;        int fryCookTopTiled = fryCookTopEdge / tileSize;</b>
+<b class="fc">&nbsp;        int fryCookLeftTiled = fryCookLeftEdge / tileSize;</b>
+<b class="fc">&nbsp;        int fryCookRightTiled = fryCookRightEdge / tileSize;</b>
+<b class="fc">&nbsp;        int fryCookBottomTiled = fryCookBottomEdge / tileSize;</b>
+&nbsp;
+<b class="pc">&nbsp;        switch (newDirection) {</b>
+&nbsp;            case DOWN -&gt; {
+<b class="fc">&nbsp;                fryCookBottomTiled = (fryCookBottomEdge + 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(fryCookLeftTiled, fryCookBottomTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(fryCookRightTiled, fryCookBottomTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case UP -&gt; {
+<b class="fc">&nbsp;                fryCookTopTiled = (fryCookTopEdge - 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(fryCookLeftTiled, fryCookTopTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(fryCookRightTiled, fryCookTopTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case LEFT -&gt; {
+<b class="fc">&nbsp;                fryCookLeftTiled = (fryCookLeftEdge - 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(fryCookLeftTiled, fryCookTopTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(fryCookLeftTiled, fryCookBottomTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            case RIGHT -&gt; {
+<b class="fc">&nbsp;                fryCookRightTiled = (fryCookRightEdge + 4) / tileSize;</b>
+<b class="fc">&nbsp;                boolean tileOneOpen = board.getIfTileOpen(fryCookRightTiled, fryCookBottomTiled);</b>
+<b class="fc">&nbsp;                boolean tileTwoOpen = board.getIfTileOpen(fryCookRightTiled, fryCookTopTiled);</b>
+<b class="pc">&nbsp;                return tileOneOpen &amp;&amp; tileTwoOpen;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if a player is playing in a game.
+&nbsp;     *
+&nbsp;     * @return True if a player is active, False otherwise.
+&nbsp;     */
+&nbsp;    private boolean checkIfPlaying() {
+<b class="nc">&nbsp;        return renderThread != null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Starts a new render thread.
+&nbsp;     */
+&nbsp;    public void startRenderThread() {
+<b class="nc">&nbsp;        renderThread = new Thread(this);</b>
+<b class="nc">&nbsp;        renderThread.start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Repaints a game screen.
+&nbsp;     */
+&nbsp;    private void render() {
+<b class="fc">&nbsp;        repaint();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Repaints a game screen.
+&nbsp;     *
+&nbsp;     * @param g - given graphic
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void paintComponent(Graphics g) {
+&nbsp;
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+<b class="nc">&nbsp;        Graphics2D graphics2D = (Graphics2D) g;</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int yCoordinate = 0; yCoordinate &lt; board.getTileHeight(); yCoordinate++) {</b>
+<b class="nc">&nbsp;            for (int xCoordinate = 0; xCoordinate &lt; board.getTileWidth(); xCoordinate++) {</b>
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 0) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 1) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedTopBottomWall(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 2) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedSideWall(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 3) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedChairFront(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 4) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedChairBack(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 5) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedChairLeft(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 6) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedChairRight(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 7) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedHorizontalLeftTable(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 8) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedHorizontalRightTable(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == 9) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedVerticalTopTable(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == Character.getNumericValue(&#39;a&#39;)) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedVerticalBottomTable(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == Character.getNumericValue(&#39;b&#39;)) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    if (checkIfDeepFryerTriggered(xCoordinate, yCoordinate)) {</b>
+<b class="nc">&nbsp;                        continue;</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedDeepFryer(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == Character.getNumericValue(&#39;c&#39;)) {</b>
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedOpen(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    if (checkIfKeyCollected(xCoordinate, yCoordinate)) {</b>
+<b class="nc">&nbsp;                        continue;</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    graphics2D.drawImage(boardSpriteManager.getBufferedKey(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                            this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                    continue;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (board.getTileType(xCoordinate, yCoordinate) == Character.getNumericValue(&#39;d&#39;)) {</b>
+<b class="nc">&nbsp;                    if ((gameState.getDifficulty() == 1 || gameState.getDifficulty() == 2 || gameState.getDifficulty() == 3)</b>
+<b class="nc">&nbsp;                            &amp;&amp; gameState.getKeysCollected() == 3) {</b>
+<b class="nc">&nbsp;                        graphics2D.drawImage(boardSpriteManager.getBufferedOpenDoor(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                                this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                        saveDoor[0] = (xCoordinate);</b>
+<b class="nc">&nbsp;                        saveDoor[1] = (yCoordinate);</b>
+<b class="nc">&nbsp;                        doorOpen = true;</b>
+&nbsp;
+<b class="nc">&nbsp;                    } else if ((gameState.getDifficulty() == 4 || gameState.getDifficulty() == 5 || gameState.getDifficulty() == 6)</b>
+<b class="nc">&nbsp;                            &amp;&amp; gameState.getKeysCollected() == 5) {</b>
+<b class="nc">&nbsp;                        graphics2D.drawImage(boardSpriteManager.getBufferedOpenDoor(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                                this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                        saveDoor[0] = (xCoordinate);</b>
+<b class="nc">&nbsp;                        saveDoor[1] = (yCoordinate);</b>
+<b class="nc">&nbsp;                        doorOpen = true;</b>
+<b class="nc">&nbsp;                    } else if ((gameState.getDifficulty() == 7 || gameState.getDifficulty() == 8 || gameState.getDifficulty() == 9) &amp;&amp; gameState.getKeysCollected() == 8) {</b>
+<b class="nc">&nbsp;                        graphics2D.drawImage(boardSpriteManager.getBufferedOpenDoor(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                                this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;                        saveDoor[0] = (xCoordinate);</b>
+<b class="nc">&nbsp;                        saveDoor[1] = (yCoordinate);</b>
+<b class="nc">&nbsp;                        doorOpen = true;</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        graphics2D.drawImage(boardSpriteManager.getBufferedClosedDoor(), xCoordinate * tileSize, yCoordinate * tileSize,</b>
+<b class="nc">&nbsp;                                this.tileSize, this.tileSize, null);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (FryCook fryCook : fryCooks) {</b>
+<b class="nc">&nbsp;            graphics2D.drawImage(fryCook.getActiveImage(), fryCook.getX(), fryCook.getY(),</b>
+<b class="nc">&nbsp;                    this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        graphics2D.drawImage(playerCharacter.getActiveImage(), playerCharacter.getX(), playerCharacter.getY(),</b>
+<b class="nc">&nbsp;                this.tileSize, this.tileSize, null);</b>
+<b class="nc">&nbsp;        graphics2D.drawImage(boardSpriteManager.getBufferedPotatoFriend(), potatoFriend.getX(), potatoFriend.getY(),</b>
+<b class="nc">&nbsp;                this.tileSize, this.tileSize, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if a deep fryer is has been triggered at given x,y coordinates.
+&nbsp;     *
+&nbsp;     * @param xCoordinate - x coordinate of a given position
+&nbsp;     * @param yCoordinate - y coordinate of a given position
+&nbsp;     * @return True if it has been triggered, False otherwise
+&nbsp;     */
+&nbsp;    private boolean checkIfDeepFryerTriggered(int xCoordinate, int yCoordinate) {
+&nbsp;
+<b class="nc">&nbsp;        for (DeepFryer deepFryer : deepFryers) {</b>
+<b class="nc">&nbsp;            if (deepFryer.getX() / tileSize == xCoordinate &amp;&amp; deepFryer.getY() / tileSize == yCoordinate) {</b>
+<b class="nc">&nbsp;                return deepFryer.getHasBeenTriggered();</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if a key is has been collected at given x,y coordinates.
+&nbsp;     *
+&nbsp;     * @param xCoordinate - x coordinate of a given position
+&nbsp;     * @param yCoordinate - y coordinate of a given position
+&nbsp;     * @return True if it has been collected, False otherwise
+&nbsp;     */
+&nbsp;    private boolean checkIfKeyCollected(int xCoordinate, int yCoordinate) {
+&nbsp;
+<b class="nc">&nbsp;        for (DoorKey doorKey : doorKeys) {</b>
+<b class="nc">&nbsp;            if (doorKey.getX() / tileSize == xCoordinate &amp;&amp; doorKey.getY() / tileSize == yCoordinate) {</b>
+<b class="nc">&nbsp;                return doorKey.getHasBeenCollected();</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Toggles the game screen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     *
+&nbsp;     * @param onoff toggles the Helpscreen&#39;s buttons if equal to &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     */
+&nbsp;    public void togglebuttons(String onoff) {
+<b class="nc">&nbsp;        if (onoff == &quot;ON&quot;) {</b>
+<b class="nc">&nbsp;            ((Button) pause).setEnabledAndVisibleON();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            ((Button) pause).setEnabledAndVisibleOFF();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the game screen&#39;s buttons.
+&nbsp;     */
+&nbsp;    public void buttons() {
+&nbsp;
+<b class="fc">&nbsp;        pause = new Button(&quot;PAUSE&quot;, this, 1035, 360, 160, 80);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the player presses the pause button in the panel. 
+&nbsp;     *  This method pauses the game when the button gets pushed.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;        String pressed = e.getActionCommand();</b>
+<b class="nc">&nbsp;        if (pressed.equals(&quot;PAUSE&quot;)) {</b>
+<b class="nc">&nbsp;            togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;            ui.setSize(1024, 768);</b>
+<b class="nc">&nbsp;            setVisible(false);</b>
+<b class="nc">&nbsp;            pausescreen.setLabel(); // USE THIS ON WIN AND GAMEOVER SCREEN AFTER WE IMPLEMENT THEM CORRECTLY</b>
+<b class="nc">&nbsp;            pausescreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;            pausescreen.setVisible(true);</b>
+<b class="nc">&nbsp;            pausescreen.requestFocus();</b>
+<b class="nc">&nbsp;            setPauseFlag();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a score label which displays a score, a level label which displays the room number,
+&nbsp;     * and a timer label which displays the current game play time.
+&nbsp;     */
+&nbsp;    public void addLabels() {
+<b class="fc">&nbsp;        scoreL = new Label(&quot; Score: &quot; + gameState.getScore(), this, 1024, 100, 200, 100);</b>
+<b class="fc">&nbsp;        levelL = new Label(&quot; Room: &quot; + gameState.getLevelNum() + &quot; / 3&quot;, this, 1024, 0, 200, 100);</b>
+<b class="fc">&nbsp;        timerL = new Label(&quot; Time: &quot; + gameState.getTime(), this, 1024, 200, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets current game&#39;s pause flag to given pause flag.
+&nbsp;     *
+&nbsp;     * @param pauseFlagFromScreen - True/False value of given pause flag from screen
+&nbsp;     */
+&nbsp;    private void setPauseFlagFromScreen(boolean pauseFlagFromScreen) {
+<b class="nc">&nbsp;        this.pauseGameFlag = pauseFlagFromScreen;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets current game&#39;s pause flag to True.
+&nbsp;     */
+&nbsp;    public void setPauseFlag() {
+<b class="nc">&nbsp;        pauseGameFlag = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void unSetPauseFlag() {
+<b class="nc">&nbsp;        pauseGameFlag = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets current game&#39;s pause state with given pause flag.
+&nbsp;     *
+&nbsp;     * @param pause - pause flag
+&nbsp;     */
+&nbsp;    public void getPause(PauseScreen pause) {
+<b class="nc">&nbsp;        this.pausescreen = pause;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets current game&#39;s win state with given win flag.
+&nbsp;     *
+&nbsp;     * @param win - win flag
+&nbsp;     */
+&nbsp;    public void getWin(WinScreen win) {
+<b class="nc">&nbsp;        this.winscreen = win;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets current game&#39;s lose state with given lose flag.
+&nbsp;     *
+&nbsp;     * @param lose - lose flag
+&nbsp;     */
+&nbsp;    public void getLose(LoseScreen lose) {
+<b class="nc">&nbsp;        this.losescreen = lose;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets current game&#39;s difficulty state to given difficulty state.
+&nbsp;     *
+&nbsp;     * @param difficultyState - given difficulty state
+&nbsp;     */
+&nbsp;    public void setGameDifficultyState(int difficultyState) {
+<b class="nc">&nbsp;        gameState.setDifficulty(difficultyState);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes new map.
+&nbsp;     * - Create new board, door keys, deep fryers, fry cooks, etc
+&nbsp;     */
+&nbsp;    public void initMap() {
+<b class="fc">&nbsp;        board = new Board(gameState.getPlayableWidth(), gameState.getPlayableHeight(), gameState.getDifficulty());</b>
+<b class="fc">&nbsp;        int[] XYTiles = getOpenTileCoordinates();</b>
+<b class="fc">&nbsp;        potatoFriend = EntityFactory.makePotatoFriend(XYTiles);</b>
+<b class="fc">&nbsp;        doorKeys = EntityFactory.makeDoorKeys(board.getDoorKeyPositions(), this.tileSize);</b>
+<b class="fc">&nbsp;        deepFryers = EntityFactory.makeDeepFryers(board.getDeepFryerPositions(), this.tileSize);</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            fryCooks = EntityFactory.makeFryCooks(gameState.getDifficulty(), this.tileSize);</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            exit(68);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets X,Y coordinates of open tile.
+&nbsp;     *
+&nbsp;     * @return X, Y coordinates of open tile
+&nbsp;     */
+&nbsp;    private int[] getOpenTileCoordinates() {
+<b class="fc">&nbsp;        int[] XYTiles = board.getOpenTileCoordinates();</b>
+<b class="fc">&nbsp;        XYTiles[0] *= tileSize;</b>
+<b class="fc">&nbsp;        XYTiles[1] *= tileSize;</b>
+<b class="fc">&nbsp;        return XYTiles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PlayerCharacter getPlayerCharacter(){
+<b class="fc">&nbsp;        return playerCharacter;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Direction getDirection(){
+<b class="fc">&nbsp;        return direction;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Direction getDirectionTemp(){
+<b class="fc">&nbsp;        return directionTemp;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDirectionTemp(Direction tmp){
+<b class="fc">&nbsp;        directionTemp = tmp;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * returns the arraylist of frycooks
+&nbsp;     * @return   : returns the frycooks
+&nbsp;     */
+&nbsp;    public ArrayList&lt;FryCook&gt; getFryCooks(){
+<b class="fc">&nbsp;        return fryCooks;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  Sets the doorOpen variable to true
+&nbsp;     */
+&nbsp;    public void setDoorOpenTrue(){
+<b class="fc">&nbsp;        doorOpen = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  Sets the nextScreen variable to true
+&nbsp;     */
+&nbsp;    public void setNextScreenTrue(){
+<b class="fc">&nbsp;        nextScreen = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

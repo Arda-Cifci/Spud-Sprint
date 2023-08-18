@@ -1,0 +1,583 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PlayerTracker</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.GameLoop</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerTracker (group19.GameLoop)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerTracker</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.6%
+  </span>
+  <span class="absValue">
+    (69/194)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.2%
+  </span>
+  <span class="absValue">
+    (78/169)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerTracker$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.6%
+  </span>
+  <span class="absValue">
+    (69/194)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.5%
+  </span>
+  <span class="absValue">
+    (79/170)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.GameLoop;
+&nbsp;
+&nbsp;import group19.Entities.FryCook;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; *  This class represents the moving enemy&#39;s player tracker / search algorithm
+&nbsp; */
+&nbsp;public class PlayerTracker{
+&nbsp;    //Variables and Objects used
+&nbsp;    private GameLoop gameLoop;
+<b class="fc">&nbsp;    private final int tileSize = 32;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The constructor for this class, takes in gameloop screen/class and sets it for use in this class. 
+&nbsp;     * 
+&nbsp;     * @param gl : the gameloop object used throughout this class in order to manipulate the moving enemy.
+&nbsp;     */
+<b class="fc">&nbsp;    public PlayerTracker (GameLoop gl) {</b>
+<b class="fc">&nbsp;        this.gameLoop = gl;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  The code for the frycook enemy to track the player and move in the player&#39;s direction.
+&nbsp;     * 
+&nbsp;     * @param fryCook  : the frycook to move towards the player.
+&nbsp;     */
+&nbsp;    public void fryCookTrackingPlayerMove(FryCook fryCook) {
+<b class="fc">&nbsp;        int fryCookXTile = fryCook.getX() / tileSize;</b>
+<b class="fc">&nbsp;        int fryCookYTile = fryCook.getY() / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        int playerXTile = gameLoop.getPlayerCharacter().getX() / tileSize;</b>
+<b class="fc">&nbsp;        int playerYTile = gameLoop.getPlayerCharacter().getY() / tileSize;</b>
+&nbsp;
+<b class="fc">&nbsp;        int xDifference = playerXTile - fryCookXTile;</b>
+<b class="fc">&nbsp;        int yDifference = playerYTile - fryCookYTile;</b>
+&nbsp;
+<b class="fc">&nbsp;        double random = Math.random();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (gameLoop.getDirectionTemp() != gameLoop.getDirection()) {</b>
+<b class="fc">&nbsp;            gameLoop.setDirectionTemp(gameLoop.getDirection());</b>
+<b class="fc">&nbsp;            resetForceAndCaused(fryCook);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (fryCook.getForce() != Direction.STILL) {</b>
+<b class="fc">&nbsp;            forceFryCookMovement(fryCook);</b>
+<b class="fc">&nbsp;        } else if (Math.abs(xDifference) &gt; Math.abs(yDifference)) {</b>
+<b class="fc">&nbsp;            xPathSearch(fryCook, xDifference, yDifference, random);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            yPathSearch(fryCook, xDifference, yDifference, random);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  If the player is farther away by their x - coordinate to the frycook enemy this method gets called.
+&nbsp;     * 
+&nbsp;     *  This method moves the frycook&#39;s x coordinate closer to the player.
+&nbsp;     *  If x coordinate is 0 than force move the enemy to move around obstacles.  
+&nbsp;     * 
+&nbsp;     * @param fryCook      : The frycook to move.
+&nbsp;     * @param xDifference  : The x coordinate difference between the frycook enemy and player.
+&nbsp;     * @param yDifference  : The y coordinate difference between the frycook enemy and player.
+&nbsp;     * @param random       : A random number between 0 and 1 , used to decide some movement logic.
+&nbsp;     */
+&nbsp;    public void xPathSearch(FryCook fryCook, Integer xDifference, Integer yDifference, Double random){
+<b class="fc">&nbsp;        if (xDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="fc">&nbsp;            fryCook.move(2, 0);</b>
+<b class="fc">&nbsp;        } else if (xDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="fc">&nbsp;            fryCook.move(-2, 0);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            setForceFromRightOrLeft(fryCook, yDifference, random);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  If the player is farther away by their y - coordinate to the frycook enemy this method gets called.
+&nbsp;     * 
+&nbsp;     *  This method moves the frycook&#39;s y coordinate closer to the player.
+&nbsp;     *  If y coordinate is 0 than force move the enemy to move around obstacles.  
+&nbsp;     * 
+&nbsp;     * @param fryCook      : The frycook to move.
+&nbsp;     * @param xDifference  : The x coordinate difference between the frycook enemy and player.
+&nbsp;     * @param yDifference  : The y coordinate difference between the frycook enemy and player.
+&nbsp;     * @param random       : A random number between 0 and 1 , used to decide some movement logic.
+&nbsp;     */
+&nbsp;    public void yPathSearch(FryCook fryCook, Integer xDifference, Integer yDifference, Double random){
+<b class="fc">&nbsp;        if (yDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="fc">&nbsp;            fryCook.move(0, 2);</b>
+<b class="fc">&nbsp;        } else if (yDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="fc">&nbsp;            fryCook.move(0, -2);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            setForceFromUpOrDown(fryCook, xDifference, random);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the frycook enemy needs to get force moved around obstacles.
+&nbsp;     *  Specifically if the enemy cannot move in the right or left direction.
+&nbsp;     * 
+&nbsp;     *  This method sets the frycook enemies force move direction.  
+&nbsp;     * 
+&nbsp;     * @param fryCook       : The frycook to move. 
+&nbsp;     * @param yDifference   : The y coordinate difference between the frycook enemy and player.
+&nbsp;     * @param random        : A random number between 0 and 1 , used to decide some movement logic.
+&nbsp;     */
+&nbsp;    public void setForceFromRightOrLeft(FryCook fryCook, Integer yDifference, Double random){
+&nbsp;           // RIGHT LOGIC
+<b class="fc">&nbsp;        if (!gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="pc">&nbsp;            if (yDifference &gt; -8 &amp;&amp; yDifference &lt; 8) {</b>
+<b class="pc">&nbsp;                if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.UP) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.UP, Direction.RIGHT); // force UP</b>
+<b class="pc">&nbsp;                } else if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.DOWN) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.DOWN, Direction.RIGHT);// force DOWN</b>
+&nbsp;                } else {
+<b class="pc">&nbsp;                    if (random &gt; 0.5) {</b>
+<b class="nc">&nbsp;                        setForceAndCaused(fryCook, Direction.DOWN, Direction.RIGHT);// force DOWN</b>
+&nbsp;                    } else {
+<b class="fc">&nbsp;                        setForceAndCaused(fryCook, Direction.UP, Direction.RIGHT);// force UP</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;            } else if (yDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(0, -2);</b>
+<b class="nc">&nbsp;            } else if (yDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(0, 2);</b>
+&nbsp;            }
+&nbsp;            // LEFT LOGIC BRANCH OF LOGIC
+<b class="pc">&nbsp;        } else if (!gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="pc">&nbsp;            if (yDifference &gt; -8 &amp;&amp; yDifference &lt; 8) {</b>
+<b class="pc">&nbsp;                if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.UP) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.UP, Direction.LEFT); // force UP</b>
+<b class="pc">&nbsp;                } else if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.DOWN) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.DOWN, Direction.LEFT); // force DOWN</b>
+&nbsp;                } else {
+<b class="pc">&nbsp;                    if (random &gt; 0.5) {</b>
+<b class="nc">&nbsp;                        setForceAndCaused(fryCook, Direction.DOWN, Direction.LEFT);// force DOWN</b>
+&nbsp;                    } else {
+<b class="fc">&nbsp;                        setForceAndCaused(fryCook, Direction.UP, Direction.LEFT);// force UP</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;            } else if (yDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(0, -2);</b>
+<b class="nc">&nbsp;            } else if (yDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(0, 2);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the frycook enemy needs to get force moved around obstacles.
+&nbsp;     *  Specifically if the enemy cannot move in the Up or Down direction.
+&nbsp;     * 
+&nbsp;     *  This method sets the frycook enemies force move direction.  
+&nbsp;     * 
+&nbsp;     * @param fryCook       : The frycook to move. 
+&nbsp;     * @param xDifference   : The x coordinate difference between the frycook enemy and player.
+&nbsp;     * @param random        : A random number between 0 and 1 , used to decide some movement logic.
+&nbsp;     */
+&nbsp;    public void setForceFromUpOrDown(FryCook fryCook, Integer xDifference, Double random){
+&nbsp;           // DOWN BRANCH OF LOGIC
+<b class="fc">&nbsp;        if (!gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="pc">&nbsp;            if (xDifference &gt; -8 &amp;&amp; xDifference &lt; 8) {</b>
+<b class="pc">&nbsp;                if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.LEFT) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.LEFT, Direction.DOWN);// force left</b>
+<b class="pc">&nbsp;                } else if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.RIGHT) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.RIGHT, Direction.DOWN); // force right</b>
+&nbsp;                } else {
+<b class="pc">&nbsp;                    if (random &gt; 0.5) {</b>
+<b class="nc">&nbsp;                        setForceAndCaused(fryCook, Direction.RIGHT, Direction.DOWN);// force right</b>
+&nbsp;                    } else {
+<b class="fc">&nbsp;                        setForceAndCaused(fryCook, Direction.LEFT, Direction.DOWN);// force left</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;            } else if (xDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(-2, 0);</b>
+<b class="nc">&nbsp;            } else if (xDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(2, 0);</b>
+&nbsp;            } // UP BRANCH OF LOGIC
+<b class="pc">&nbsp;        } else if (!gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="pc">&nbsp;            if (xDifference &gt; -8 &amp;&amp; xDifference &lt; 8) {</b>
+<b class="pc">&nbsp;                if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.LEFT) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.LEFT, Direction.UP);// force left</b>
+<b class="pc">&nbsp;                } else if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook) &amp;&amp; gameLoop.getDirection() == Direction.RIGHT) {</b>
+<b class="nc">&nbsp;                    setForceAndCaused(fryCook, Direction.RIGHT, Direction.UP);// force right</b>
+&nbsp;                } else {
+<b class="pc">&nbsp;                    if (random &gt; 0.5) {</b>
+<b class="fc">&nbsp;                        setForceAndCaused(fryCook, Direction.RIGHT, Direction.UP);// force right</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        setForceAndCaused(fryCook, Direction.LEFT, Direction.UP);// force left</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="nc">&nbsp;            } else if (xDifference &lt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(-2, 0);</b>
+<b class="nc">&nbsp;            } else if (xDifference &gt; 0 &amp;&amp; gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                fryCook.move(2, 0);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method checks to see if the forcefully moved frycook enemy can go in the forced direction. 
+&nbsp;     * 
+&nbsp;     * @param fryCook  : The frycook to move. 
+&nbsp;     */
+&nbsp;    public void forceFryCookMovement(FryCook fryCook){
+<b class="pc">&nbsp;        switch (fryCook.getForce()){</b>
+&nbsp;            case LEFT -&gt; {
+<b class="fc">&nbsp;                forceFryCookLeftCheck(fryCook);</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case UP -&gt; {
+<b class="fc">&nbsp;                forceFryCookUpCheck(fryCook);</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case RIGHT -&gt; {
+<b class="fc">&nbsp;                forceFryCookRightCheck(fryCook);</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case DOWN -&gt; {
+<b class="nc">&nbsp;                forceFryCookDownCheck(fryCook);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {break;}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method decides if the frycook can move in the choosen direction forcefully.
+&nbsp;     *  If yes then forcefully moves frycook in said direction to clear obstacles.  
+&nbsp;     *  If no then re-pick a new direction to force move.
+&nbsp;     * 
+&nbsp;     * @param fryCook : The frycook to move. 
+&nbsp;     */
+&nbsp;    public void forceFryCookLeftCheck(FryCook fryCook){
+<b class="pc">&nbsp;        switch(fryCook.getCaused()){</b>
+&nbsp;            case UP -&gt; {
+<b class="nc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(-2, 0);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.DOWN, Direction.LEFT);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, -8);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case DOWN -&gt; {
+<b class="pc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="pc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="fc">&nbsp;                        fryCook.move(-2, 0);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.UP, Direction.LEFT);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, 8);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {break;}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method decides if the frycook can move in the choosen direction forcefully.
+&nbsp;     *  If yes then forcefully moves frycook in said direction to clear obstacles.  
+&nbsp;     *  If no then re-pick a new direction to force move.
+&nbsp;     * 
+&nbsp;     * @param fryCook : The frycook to move. 
+&nbsp;     */
+&nbsp;    public void forceFryCookUpCheck(FryCook fryCook){
+<b class="pc">&nbsp;        switch(fryCook.getCaused()){</b>
+&nbsp;            case RIGHT -&gt; {
+<b class="pc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="pc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="fc">&nbsp;                        fryCook.move(0, -2);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.LEFT, Direction.UP);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(8, 0);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case LEFT -&gt; {
+<b class="pc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="pc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="fc">&nbsp;                        fryCook.move(0, -2);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.RIGHT, Direction.UP);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(-8, 0);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {break;}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method decides if the frycook can move in the choosen direction forcefully.
+&nbsp;     *  If yes then forcefully moves frycook in said direction to clear obstacles.  
+&nbsp;     *  If no then re-pick a new direction to force move.
+&nbsp;     * 
+&nbsp;     * @param fryCook : The frycook to move. 
+&nbsp;     */
+&nbsp;    public void forceFryCookRightCheck(FryCook fryCook){
+<b class="pc">&nbsp;        switch(fryCook.getCaused()){</b>
+&nbsp;            case UP -&gt; {
+<b class="pc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="pc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="fc">&nbsp;                        fryCook.move(2, 0);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.DOWN, Direction.RIGHT);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, -8);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case DOWN -&gt; {
+<b class="nc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(2, 0);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.UP, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.UP, Direction.RIGHT);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, 8);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {break;}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method decides if the frycook can move in the choosen direction forcefully.
+&nbsp;     *  If yes then forcefully moves frycook in said direction to clear obstacles.  
+&nbsp;     *  If no then re-pick a new direction to force move.
+&nbsp;     * 
+&nbsp;     * @param fryCook : The frycook to move. 
+&nbsp;     */
+&nbsp;    public void forceFryCookDownCheck(FryCook fryCook){
+<b class="nc">&nbsp;        switch (fryCook.getCaused()){</b>
+&nbsp;            case RIGHT -&gt; {
+<b class="nc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, 2);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.LEFT, Direction.DOWN);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, 8);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            case LEFT -&gt; {
+<b class="nc">&nbsp;                if (!gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.DOWN, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(0, 2);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        if (gameLoop.checkFryCookMoveDirection(Direction.RIGHT, fryCook)) {</b>
+<b class="nc">&nbsp;                            setForceAndCaused(fryCook, Direction.RIGHT, Direction.DOWN);</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    if (gameLoop.checkFryCookMoveDirection(Direction.LEFT, fryCook)) {</b>
+<b class="nc">&nbsp;                        fryCook.move(-8, 0);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    resetForceAndCaused(fryCook);</b>
+&nbsp;                }  
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;            default -&gt; {break;}
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reset the force and caused varialbe of the frycook object to 0
+&nbsp;     * @param fryCook   :The frycook enemy entity 
+&nbsp;     */
+&nbsp;    public void resetForceAndCaused(FryCook fryCook){
+<b class="fc">&nbsp;        fryCook.setForce(Direction.STILL);</b>
+<b class="fc">&nbsp;        fryCook.setCaused(Direction.STILL);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the force and caused variable values of the frycook object to the parameters specified
+&nbsp;     * 
+&nbsp;     * @param fryCook :The frycook enemy entity 
+&nbsp;     * @param force   :Force parameter value
+&nbsp;     * @param caused  :Caused parameter value
+&nbsp;     */
+&nbsp;    public void setForceAndCaused(FryCook fryCook, Direction force, Direction caused){
+<b class="fc">&nbsp;        fryCook.setForce(force);</b>
+<b class="fc">&nbsp;        fryCook.setCaused(caused);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

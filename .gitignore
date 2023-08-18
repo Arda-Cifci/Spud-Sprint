@@ -1,0 +1,52 @@
+# Java
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Intellij
+.idea/
+*.iws
+*.iml
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
+# Mac OS 
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux OS
+.Trash-*
+.nfs*
+.fuse_hidden*
+
+# Windows OS
+*.stackdump
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+#Maven
+/spudsprint/target/
+/spudsprint/.classpath

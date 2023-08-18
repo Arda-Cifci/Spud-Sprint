@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EntityFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.Entities</a>
+</div>
+
+<h1>Coverage Summary for Class: EntityFactory (group19.Entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EntityFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.6%
+  </span>
+  <span class="absValue">
+    (28/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.Entities;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="nc">&nbsp;public class EntityFactory {</b>
+&nbsp;    /**
+&nbsp;     * Creates fry cooks depending on the game&#39;s difficulty and level.
+&nbsp;     *
+&nbsp;     * @throws IOException if I/O error occurs.
+&nbsp;     * @param difficulty the game&#39;s difficulty
+&nbsp;     * @param tileSize the width of the tile
+&nbsp;     * @return 
+&nbsp;     */
+&nbsp;    public static ArrayList&lt;FryCook&gt; makeFryCooks(int difficulty, int tileSize) throws IOException {
+<b class="fc">&nbsp;        ArrayList&lt;FryCook&gt; fryCooks = new ArrayList&lt;FryCook&gt;();</b>
+<b class="pc">&nbsp;        switch (difficulty) {</b>
+<b class="fc">&nbsp;            case (1), (2), (3) -&gt; fryCooks.add(new FryCook(21 * tileSize, 11 * tileSize)); // tilesize (variable of GameLoop) is 32</b>
+&nbsp;            case (4), (5), (6) -&gt; {
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(21 * tileSize, 12 * tileSize));</b>
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(21 * tileSize, 17 * tileSize));</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (7) -&gt; {
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(10 * tileSize, 9 * tileSize));</b>
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(24 * tileSize, 9 * tileSize));</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (8) -&gt; {
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(9 * tileSize, 9 * tileSize));</b>
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(23 * tileSize, 9 * tileSize));</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            case (9) -&gt; {
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(9 * tileSize, 10 * tileSize));</b>
+<b class="fc">&nbsp;                fryCooks.add(new FryCook(23 * tileSize, 9 * tileSize));</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;            default -&gt; {
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return fryCooks;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates deep fryers.
+&nbsp;     * 
+&nbsp;     * @param deepFryerPositionList the x and y coordinates of all the deep fryers
+&nbsp;     * @param tileSize the width of the tile
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public static ArrayList&lt;DeepFryer&gt; makeDeepFryers(ArrayList&lt;int[]&gt; deepFryerPositionList, int tileSize) {
+<b class="fc">&nbsp;        ArrayList&lt;DeepFryer&gt; deepFryers = new ArrayList&lt;DeepFryer&gt;();</b>
+<b class="fc">&nbsp;        for (int[] XY : deepFryerPositionList) {</b>
+<b class="fc">&nbsp;            deepFryers.add(new DeepFryer(XY[0] * tileSize,</b>
+&nbsp;                    XY[1] * tileSize));
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return deepFryers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a potato friend.
+&nbsp;     * 
+&nbsp;     * @param XYtiles the initial coordinates of the potato friend.
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public static PotatoFriend makePotatoFriend(int[] XYtiles) {
+<b class="fc">&nbsp;        return new PotatoFriend(XYtiles);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the player character.
+&nbsp;     * 
+&nbsp;     * @param xcoord the initial x coordinate of the player character
+&nbsp;     * @param ycoord the initial y coordinate of the player character
+&nbsp;     * @return
+&nbsp;     * @throws IOException
+&nbsp;     */
+&nbsp;    public static PlayerCharacter makePlayerCharacter(int xcoord, int ycoord) throws IOException {
+<b class="fc">&nbsp;        return new PlayerCharacter(xcoord, ycoord);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the door keys.
+&nbsp;     * 
+&nbsp;     * @param keyPositionList the xand y coordinates of all the keys
+&nbsp;     * @param tileSize the width of the tile
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public static ArrayList&lt;DoorKey&gt; makeDoorKeys(ArrayList&lt;int[]&gt; keyPositionList, int tileSize) {
+<b class="fc">&nbsp;        ArrayList&lt;DoorKey&gt; doorKeys = new ArrayList&lt;DoorKey&gt;();</b>
+<b class="fc">&nbsp;        for (int[] XYTiles : keyPositionList) {</b>
+<b class="fc">&nbsp;            doorKeys.add(new DoorKey(XYTiles[0] * tileSize,</b>
+&nbsp;                    XYTiles[1] * tileSize));
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return doorKeys;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

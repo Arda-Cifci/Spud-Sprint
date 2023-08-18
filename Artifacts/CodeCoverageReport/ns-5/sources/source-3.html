@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > HelpScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.UIScreens</a>
+</div>
+
+<h1>Coverage Summary for Class: HelpScreen (group19.UIScreens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HelpScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.UIScreens;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * Creates and paints the Help screen and its buttons.
+&nbsp; * Able to toggle its buttons on and off, paint its buttons, and set its
+&nbsp; * option, Homescreen, Pausescreen, and Losescreen.
+&nbsp; */
+&nbsp;public class HelpScreen extends JPanel implements ActionListener {
+&nbsp;    //Variables and objects used.
+&nbsp;    private final BufferedImage buff;
+&nbsp;    private int option;
+&nbsp;    private HomeScreen homescreen;
+&nbsp;    private PauseScreen pause;
+&nbsp;    private LoseScreen lose;
+&nbsp;    private JButton back;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the Helpscreen and it&#39;s correpsonding buttons.
+&nbsp;     *
+&nbsp;     * @throws IOException
+&nbsp;     */
+<b class="nc">&nbsp;    public HelpScreen() throws IOException {</b>
+<b class="nc">&nbsp;        setLayout(null);</b>
+&nbsp;
+&nbsp;        // Paint background img.
+<b class="nc">&nbsp;        buff = ImageIO.read(getClass().getResourceAsStream(&quot;/Spud_Sprint_Help_Screen.jpg&quot;));</b>
+&nbsp;
+&nbsp;        // add buttons.
+<b class="nc">&nbsp;        buttons();</b>
+<b class="nc">&nbsp;        setFocusable(true);</b>
+<b class="nc">&nbsp;        setVisible(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Paints the UI screen with the background image.
+&nbsp;     *
+&nbsp;     * @param g - given graphic
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void paintComponent(Graphics g) {
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+<b class="nc">&nbsp;        g.drawImage(buff, 0, 0, 1008, 729, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Toggles the Helpscreen&#39;s buttons if the parameter is &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     *
+&nbsp;     * @param onoff toggles the Helpscreen&#39;s buttons if equal to &quot;ON&quot;. Otherwise, turns them off.
+&nbsp;     */
+&nbsp;    public void togglebuttons(String onoff) {
+<b class="nc">&nbsp;        if (onoff == &quot;ON&quot;) {</b>
+<b class="nc">&nbsp;            ((Button) back).setEnabledAndVisibleON();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            ((Button) back).setEnabledAndVisibleOFF();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and paints the Helpscreen&#39;s buttons.
+&nbsp;     */
+&nbsp;    public void buttons() {
+&nbsp;        //Create back button
+<b class="nc">&nbsp;        back = new Button(&quot;RETURN&quot;, this, 25, 600, 200, 100);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *  This method gets called when the player presses the back button in the panel. 
+&nbsp;     *  This method returns the player to the previous panel they came from.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;        String pressed = e.getActionCommand();</b>
+<b class="nc">&nbsp;        if (pressed.equals(&quot;RETURN&quot;)) {</b>
+<b class="nc">&nbsp;            if (option == 1) {</b>
+<b class="nc">&nbsp;                togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;                setVisible(false);</b>
+<b class="nc">&nbsp;                homescreen.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;                homescreen.setVisible(true);</b>
+<b class="nc">&nbsp;                homescreen.requestFocus();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (option == 2) {</b>
+<b class="nc">&nbsp;                togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;                setVisible(false);</b>
+<b class="nc">&nbsp;                pause.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;                pause.setVisible(true);</b>
+<b class="nc">&nbsp;                pause.requestFocus();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (option == 3) {</b>
+<b class="nc">&nbsp;                togglebuttons(&quot;OFF&quot;);</b>
+<b class="nc">&nbsp;                setVisible(false);</b>
+<b class="nc">&nbsp;                lose.togglebuttons(&quot;ON&quot;);</b>
+<b class="nc">&nbsp;                lose.setVisible(true);</b>
+<b class="nc">&nbsp;                lose.requestFocus();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Helpscreen&#39;s option to the parameter a.
+&nbsp;     *
+&nbsp;     * @param a option to set
+&nbsp;     */
+&nbsp;    public void setOption(int a) {
+<b class="nc">&nbsp;        this.option = a;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the Helpscreens&#39;s homescreen object to the parameter title.
+&nbsp;     *
+&nbsp;     * @param title : title to set
+&nbsp;     */
+&nbsp;    public void setTitle(HomeScreen title) {
+<b class="nc">&nbsp;        this.homescreen = title;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Helpscreen&#39;s pausescreen object to parameter pause.
+&nbsp;     *
+&nbsp;     * @param pause pause to set
+&nbsp;     */
+&nbsp;    public void setPause(PauseScreen pause) {
+<b class="nc">&nbsp;        this.pause = pause;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the Helpscreen&#39;s losescreen object to paramter lose.
+&nbsp;     *
+&nbsp;     * @param lose lose to set
+&nbsp;     */
+&nbsp;    public void setLose(LoseScreen lose) {
+<b class="nc">&nbsp;        this.lose = lose;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

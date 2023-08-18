@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Music</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">group19.GameLoop</a>
+</div>
+
+<h1>Coverage Summary for Class: Music (group19.GameLoop)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Music</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package group19.GameLoop;
+&nbsp;
+&nbsp;import javax.sound.sampled.AudioInputStream;
+&nbsp;import javax.sound.sampled.AudioSystem;
+&nbsp;import javax.sound.sampled.Clip;
+&nbsp;import javax.sound.sampled.FloatControl;
+&nbsp;import java.io.BufferedInputStream;
+&nbsp;import java.io.InputStream;
+&nbsp;
+&nbsp;/**
+&nbsp; * Able to play music and stop the music.
+&nbsp; */
+<b class="nc">&nbsp;public class Music {</b>
+&nbsp;    //Variables used
+&nbsp;    private AudioInputStream audioInput;
+&nbsp;    private Clip clip;
+&nbsp;    private FloatControl volume;
+&nbsp;
+&nbsp;    /*
+&nbsp;     * Plays music by getting the music file in a stream and using the javax.sound.sampled.Clip library to play it.
+&nbsp;     */
+&nbsp;    public void playMusic() {
+&nbsp;        try {
+<b class="nc">&nbsp;            InputStream audio = getClass().getResourceAsStream(&quot;/background_music.wav&quot;);</b>
+<b class="nc">&nbsp;            InputStream bufferedIn = new BufferedInputStream(audio);</b>
+<b class="nc">&nbsp;            audioInput = AudioSystem.getAudioInputStream(bufferedIn);</b>
+&nbsp;
+<b class="nc">&nbsp;            clip = AudioSystem.getClip();</b>
+<b class="nc">&nbsp;            clip.open(audioInput);</b>
+&nbsp;
+<b class="nc">&nbsp;            volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);</b>
+<b class="nc">&nbsp;            volume.setValue(-20);</b>
+&nbsp;
+<b class="nc">&nbsp;            clip.start();</b>
+<b class="nc">&nbsp;            clip.loop(Clip.LOOP_CONTINUOUSLY);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception ex) {</b>
+<b class="nc">&nbsp;            ex.printStackTrace();</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Stops the music.
+&nbsp;     */
+&nbsp;    public void closeMusic() {
+<b class="nc">&nbsp;        clip.close();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 22:45</div>
+</div>
+</body>
+</html>

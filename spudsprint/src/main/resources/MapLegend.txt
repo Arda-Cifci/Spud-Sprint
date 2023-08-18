@@ -1,0 +1,29 @@
+0 = floor tile = "Tile.png"         
+
+1 = front facing wall = "WallFrontAndBack.png"
+
+2 = top facing walls = "WallSides.png"
+
+3 = chair front = "ChairFront.png"
+
+4 = chair back = "ChairBack.png" 
+
+5 = chair left = "ChairLeft.png"
+
+6 = chair right = "ChairRight.png"
+
+7 = Table left = "HorizonTableLeft.png"
+
+8 = table right = "HorizonTableRight.png"
+
+9 = table up = "VertTableTop.png
+
+a = table down = "VertTableBottom.png"
+
+b = Deep fryer = "DeepFryer.png"
+
+c = Key = "Key.png"
+
+d = Closed door = "DoorClosed.png"
+
+
